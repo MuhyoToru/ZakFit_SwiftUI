@@ -8,13 +8,13 @@
 import Foundation
 
 class WeightGoal: Identifiable {
-    var id: UUID
+    var id: UUID?
     var weight: Double
     var idChosenPeriod: UUID
     var idUser: UUID
 
-    init(id: UUID, weight: Double, idChosenPeriod: UUID, idUser: UUID) {
-        self.id = id
+    init(id: UUID? = nil, weight: Double, idChosenPeriod: UUID, idUser: UUID) {
+        self.id = id ?? UUID()
         self.weight = weight
         self.idChosenPeriod = idChosenPeriod
         self.idUser = idUser

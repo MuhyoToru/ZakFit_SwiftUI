@@ -8,12 +8,12 @@
 import Foundation
 
 class Notification: Identifiable {
-    var id: UUID
+    var id: UUID?
     var message: String
     var idNotificationType: UUID
 
-    init(id: UUID, message: String, idNotificationType: UUID) {
-        self.id = id
+    init(id: UUID? = nil, message: String, idNotificationType: UUID) {
+        self.id = id ?? UUID()
         self.message = message
         self.idNotificationType = idNotificationType
     }

@@ -8,7 +8,7 @@
 import Foundation
 
 class CaloriesGoal: Identifiable {
-    var id: UUID
+    var id: UUID?
     var caloriesGoal: Double
     var proteinsGoal: Double
     var carbohydratesGoal: Double
@@ -16,8 +16,8 @@ class CaloriesGoal: Identifiable {
     var idChosenPeriod: UUID
     var idUser: UUID
 
-    init(id: UUID, caloriesGoal: Double, proteinsGoal: Double, carbohydratesGoal: Double, lipidsGoal: Double, idChosenPeriod: UUID, idUser: UUID) {
-        self.id = id
+    init(id: UUID? = nil, caloriesGoal: Double, proteinsGoal: Double, carbohydratesGoal: Double, lipidsGoal: Double, idChosenPeriod: UUID, idUser: UUID) {
+        self.id = id ?? UUID()
         self.caloriesGoal = caloriesGoal
         self.proteinsGoal = proteinsGoal
         self.carbohydratesGoal = carbohydratesGoal

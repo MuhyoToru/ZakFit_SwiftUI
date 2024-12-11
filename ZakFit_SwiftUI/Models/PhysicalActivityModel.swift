@@ -8,15 +8,15 @@
 import Foundation
 
 class PhysicalActivity: Identifiable {
-    var id: UUID
+    var id: UUID?
     var date: Date
     var duration: Double
     var caloriesBurned: Double
     var idUser: UUID
     var idIntensity: UUID
 
-    init(id: UUID, date: Date, duration: Double, caloriesBurned: Double, idUser: UUID, idIntensity: UUID) {
-        self.id = id
+    init(id: UUID? = nil, date: Date, duration: Double, caloriesBurned: Double, idUser: UUID, idIntensity: UUID) {
+        self.id = id ?? UUID()
         self.date = date
         self.duration = duration
         self.caloriesBurned = caloriesBurned

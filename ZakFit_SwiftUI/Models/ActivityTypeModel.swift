@@ -8,13 +8,13 @@
 import Foundation
 
 class ActivityType: Identifiable {
-    var id: UUID
+    var id: UUID?
     var name: String
     var caloriesBurnedPerHour: Double
     var image: String
 
-    init(id: UUID, name: String, caloriesBurnedPerHour: Double, image: String) {
-        self.id = id
+    init(id: UUID? = nil, name: String, caloriesBurnedPerHour: Double, image: String) {
+        self.id = id ?? UUID()
         self.name = name
         self.caloriesBurnedPerHour = caloriesBurnedPerHour
         self.image = image

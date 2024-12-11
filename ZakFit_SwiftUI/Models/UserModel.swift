@@ -8,16 +8,18 @@
 import Foundation
 
 class User : Identifiable, Codable {
-    var id : UUID
+    var id : UUID?
     var name : String
     var firstname : String
     var email : String
     var size : Double
     var birthday : Date
     var notificationTime : String
+    var idFoodPeference : UUID?
+    var idGender : UUID?
     
-    init(id: UUID, name: String, firstname: String, email: String, size: Double, birthday: Date, notificationTime: String) {
-        self.id = id
+    init(id: UUID? = nil, name: String, firstname: String, email: String, size: Double, birthday: Date, notificationTime: String) {
+        self.id = id ?? UUID()
         self.name = name
         self.firstname = firstname
         self.email = email
@@ -26,13 +28,34 @@ class User : Identifiable, Codable {
         self.notificationTime = notificationTime
     }
     
+    func verifyName() -> Bool {
+        return self.name != ""
+    }
+    
+    func verifyFirstname() -> Bool {
+        return self.firstname != ""
+    }
+    
+    func verifySize(size : String) -> Bool {
+        if size == "" {
+            return false
+        }
+        
+        if Double(size) ?? 0 > 0 {
+            self.size = Double(size) ?? 0
+            return true
+        }
+        
+        return false
+    }
+    
     func verifyEmail() -> Bool {
         return self.email.isValidEmail()
     }
     
     func verifyPassword(password : String) -> String {
         // Check Password Length
-        if password.count <= 8 {
+        if password.count < 8 {
             return "Mot de passe : Minimum 8 charactères"
         }
         

@@ -8,7 +8,7 @@
 import Foundation
 
 final class Aliment: Identifiable {
-    var id: UUID
+    var id: UUID?
     var name: String
     var description: String
     var image: String
@@ -18,8 +18,8 @@ final class Aliment: Identifiable {
     var carbohydrates: Double?
     var lipids: Double?
 
-    init(id: UUID, name: String, description: String, image: String, caloriesKg: Double? = nil, caloriesUnit: Double? = nil, proteins: Double? = nil, carbohydrates: Double? = nil, lipids: Double? = nil) {
-        self.id = id
+    init(id: UUID? = nil, name: String, description: String, image: String, caloriesKg: Double? = nil, caloriesUnit: Double? = nil, proteins: Double? = nil, carbohydrates: Double? = nil, lipids: Double? = nil) {
+        self.id = id ?? UUID()
         self.name = name
         self.description = description
         self.image = image

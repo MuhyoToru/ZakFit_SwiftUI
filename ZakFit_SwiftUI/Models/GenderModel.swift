@@ -8,11 +8,11 @@
 import Foundation
 
 class Gender: Identifiable, Codable, Hashable {
-    var id: UUID
+    var id: UUID?
     var name: String
 
-    init(id: UUID, name: String) {
-        self.id = id
+    init(id: UUID? = nil, name: String) {
+        self.id = id ?? UUID()
         self.name = name
     }
     

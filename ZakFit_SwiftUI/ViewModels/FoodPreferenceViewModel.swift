@@ -7,12 +7,12 @@
 
 import Foundation
 
-class GenderViewModel : ObservableObject {
-    @Published var genders : [Gender] = []
-    @Published var selectedCategory : Gender = Gender(name: "Aucune Sélection")
-    let baseUrl : String = "http://127.0.0.1:8081/genders/"
+class FoodPreferenceViewModel : ObservableObject {
+    @Published var foodPreferences : [FoodPreference] = []
+    @Published var selectedCategory : FoodPreference = FoodPreference(name: "Aucune Sélection")
+    let baseUrl : String = "http://127.0.0.1:8081/foodPreferences/"
     
-    func fetchGenders() {
+    func fetchFoodPreferences() {
         guard let url = URL(string: "\(baseUrl)") else {
             print("Invalid URL")
             return
@@ -25,10 +25,10 @@ class GenderViewModel : ObservableObject {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
                 do {
-                    let decodedGenders = try JSONDecoder().decode([Gender].self, from: data)
+                    let decodedFoodPreferences = try JSONDecoder().decode([FoodPreference].self, from: data)
                     DispatchQueue.main.async {
-                        self.genders = decodedGenders.sorted(by: { $0.name < $1.name })
-                        self.selectedCategory = self.genders.first!
+                        self.foodPreferences = decodedFoodPreferences.sorted(by: { $0.name < $1.name })
+                        self.selectedCategory = self.foodPreferences.first!
                     }
                 } catch {
                     print("Error decoding data : \(error)")

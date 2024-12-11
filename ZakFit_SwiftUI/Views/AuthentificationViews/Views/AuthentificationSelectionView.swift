@@ -34,7 +34,7 @@ struct AuthentificationSelectionView: View {
                 if selectedButton == "Connexion" {
                     ConnectionView()
                 } else {
-                    RegisterView()
+                    RegisterView(selectedButton: $selectedButton)
                 }
             }
         }

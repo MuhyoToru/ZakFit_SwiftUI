@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct ZakFit_SwiftUIApp: App {
+    @StateObject var userViewModel = UserViewModel()
+    @StateObject var userWeightViewModel = UserWeightViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear(perform: {
+                    userViewModel.verifyIfLoggedIn()
+                })
         }
+        .environmentObject(userViewModel)
+        .environmentObject(userWeightViewModel)
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 class Meal: Identifiable {
-    var id: UUID
+    var id: UUID?
     var name: String
     var date: Date
     var totalCalories: Double
@@ -18,8 +18,8 @@ class Meal: Identifiable {
     var idMealType: UUID
     var idUser: UUID
 
-    init(id: UUID, name: String, date: Date, totalCalories: Double, totalProteins: Double, totalCarbohydrates: Double, totalLipids: Double, idMealType: UUID, idUser: UUID) {
-        self.id = id
+    init(id: UUID? = nil, name: String, date: Date, totalCalories: Double, totalProteins: Double, totalCarbohydrates: Double, totalLipids: Double, idMealType: UUID, idUser: UUID) {
+        self.id = id ?? UUID()
         self.name = name
         self.date = date
         self.totalCalories = totalCalories

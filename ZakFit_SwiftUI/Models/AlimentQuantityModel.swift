@@ -8,13 +8,13 @@
 import Foundation
 
 class AlimentQuantity: Identifiable {
-    var id: UUID
+    var id: UUID?
     var quantity: Int
     var weightOrUnit: String
     var idAliment: UUID
 
-    init(id: UUID, quantity: Int, weightOrUnit: String, idAliment: UUID) {
-        self.id = id
+    init(id: UUID? = nil, quantity: Int, weightOrUnit: String, idAliment: UUID) {
+        self.id = id ?? UUID()
         self.quantity = quantity
         self.weightOrUnit = weightOrUnit
         self.idAliment = idAliment
