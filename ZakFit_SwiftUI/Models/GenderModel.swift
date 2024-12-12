@@ -20,7 +20,6 @@ class Gender: Identifiable, Codable, Hashable {
         return lhs.name == rhs.name && lhs.id == rhs.id
     }
 
-
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(id)

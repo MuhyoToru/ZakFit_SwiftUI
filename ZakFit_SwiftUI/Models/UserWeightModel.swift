@@ -36,4 +36,22 @@ class UserWeight: Identifiable, Codable, Equatable {
         
         return false
     }
+    
+    func verifyDate() -> Bool {
+        let timeToAdd : TimeInterval = 60 * 60 * 24
+        
+        print(Date.now)
+        print(self.date)
+        print(self.date + timeToAdd)
+        
+        if Date.now >= self.date + timeToAdd {
+            print("New Date")
+            
+            return true
+        }
+        
+        print("Not a new Date")
+        
+        return false
+    }
 }

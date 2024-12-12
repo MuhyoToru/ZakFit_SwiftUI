@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FoodPreferencePickerExView: View {
-    @StateObject var foodPreferenceViewModel: FoodPreferenceViewModel
+    @EnvironmentObject var foodPreferenceViewModel: FoodPreferenceViewModel
     let pickerTitle: String
     
     var body: some View {
@@ -27,5 +27,5 @@ struct FoodPreferencePickerExView: View {
 }
 
 #Preview {
-    FoodPreferencePickerExView(foodPreferenceViewModel: FoodPreferenceViewModel(), pickerTitle: "Test")
+    FoodPreferencePickerExView(pickerTitle: "Test")
 }

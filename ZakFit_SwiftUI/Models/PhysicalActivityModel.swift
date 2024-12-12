@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PhysicalActivity: Identifiable {
+class PhysicalActivity: Identifiable, Codable {
     var id: UUID?
     var date: Date
     var duration: Double

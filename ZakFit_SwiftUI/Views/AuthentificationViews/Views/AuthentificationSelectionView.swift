@@ -22,10 +22,7 @@ struct AuthentificationSelectionView: View {
                     Button(action: {
                         selectedButton = actualButton
                     }, label: {
-                        GeneralButtonDisplayExView(textToDisplay: actualButton,
-                                                   firstColor: actualButton == selectedButton ? .zfOrange : .zfLightGray,
-                                                   secondColor: .zfMediumGray,
-                                                   textColor: actualButton == selectedButton ? .white : .black)
+                        GeneralButtonDisplayExView(textToDisplay: actualButton, firstColor: actualButton == selectedButton ? .zfOrange : .zfLightGray, secondColor: .zfMediumGray, textColor: actualButton == selectedButton ? .white : .black)
                         
                     })
                 }

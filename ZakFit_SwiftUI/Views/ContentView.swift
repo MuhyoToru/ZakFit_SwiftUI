@@ -19,7 +19,7 @@ struct ContentView: View {
             ZStack {
                 TabView {
                     Tab("Activités", systemImage: "dumbbell") {
-                        AccountView()
+                        ActivitysView()
                     }
                     Tab("Repas", systemImage: "carrot") {
                         AccountView()
@@ -32,46 +32,11 @@ struct ContentView: View {
                     }
                 }
                 if userWeightViewModel.userWeights == [] {
-                    ZStack {
-                        Rectangle()
-                            .fill(.white)
-                            .ignoresSafeArea()
-                            .background(.ultraThinMaterial)
-                            .opacity(0.6)
-                        ZStack {
-                            VStack {
-                                Text("Une dernière petite chose avant de pouvoir commencer.")
-                                Text("Nous avons besoin de savoir votre poids actuel")
-                                NumberFieldExView(textFieldTitle: "Poids", textUnit: "kg", textInTextField: $weight)
-                                Button(action: {
-                                    errorMessage = ""
-                                    
-                                    if !userWeight.verifyWeight(weight: weight) {
-                                        errorMessage = "Poids invalide, doit être supérieur à 0"
-                                        print(errorMessage)
-                                    }
-                                    
-                                    if errorMessage == "" {
-                                        print("Poids valide")
-                                        userWeightViewModel.createUserWeight(weight: userWeight.weight)
-                                    }
-                                }, label: {
-                                    GeneralButtonDisplayExView(textToDisplay: "Valider", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160)
-                                })
-                            }
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(.red)
-                                    .padding(-16)
-                            )
-                            .padding()
-                        }
-                        .padding()
-                    }
+                    FirstWeightToEnterView()
                 }
             }
             .onAppear(perform: {
-                userWeightViewModel.fetchUserWeights()
+                userWeightViewModel.fetch()
             })
         } else {
             AuthentificationSelectionView()
@@ -82,5 +47,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(UserViewModel())
 }

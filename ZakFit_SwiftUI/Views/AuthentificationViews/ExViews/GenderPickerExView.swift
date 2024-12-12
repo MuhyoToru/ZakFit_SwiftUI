@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GenderPickerExView: View {
-    @StateObject var genderViewModel: GenderViewModel
+    @EnvironmentObject var genderViewModel: GenderViewModel
     let pickerTitle: String
     
     var body: some View {
@@ -27,5 +27,5 @@ struct GenderPickerExView: View {
 }
 
 #Preview {
-    GenderPickerExView(genderViewModel: GenderViewModel(), pickerTitle: "Test")
+    GenderPickerExView(pickerTitle: "Test")
 }

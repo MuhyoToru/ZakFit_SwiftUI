@@ -7,12 +7,21 @@
 
 import Foundation
 
-class Intensity: Identifiable {
+class Intensity: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
 
     init(id: UUID? = nil, name: String) {
         self.id = id ?? UUID()
         self.name = name
+    }
+    
+    static func == (lhs: Intensity, rhs: Intensity) -> Bool {
+        return lhs.name == rhs.name && lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(id)
     }
 }

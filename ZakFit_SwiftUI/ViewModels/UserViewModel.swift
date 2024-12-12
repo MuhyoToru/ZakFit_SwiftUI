@@ -142,17 +142,50 @@ class UserViewModel: ObservableObject {
                     let decodedUser = try decoder.decode(User.self, from: data)
                     DispatchQueue.main.async {
                         self.user = decodedUser
+                        self.isLoggedIn = true
                     }
                 } catch {
+                    KeychainManager.deleteTokenFromKeychain()
                     print("Error decoding data: \(data)")
-                }
-                
-                DispatchQueue.main.async {
-                    self.isLoggedIn = true
                 }
             } else if let error = error {
                 print("Error fetching data: \(error)")
             }
+        }.resume()
+    }
+    
+    func update(user: User) {
+        guard let url = URL(string: baseUrl + "update/") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let token = KeychainManager.getTokenFromKeychain() else {
+            print("No Token found")
+            return
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["name" : user.name, "firstname" : user.firstname, "email": user.email, "size": user.size, "birthday": ISO8601DateFormatter().string(from: user.birthday), "notificationTime": user.notificationTime, "idFoodPreference": user.idFoodPreference!.uuidString, "idGender": user.idGender!.uuidString])
+        } catch {
+            fatalError("Erreur de serialisation en JSON")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let responseHTTP = response as? HTTPURLResponse
+            if  responseHTTP?.statusCode != 200 {
+                print("Update failed")
+                return
+            }
+            print("Update successful")
+            
+            self.getById()
         }.resume()
     }
 }

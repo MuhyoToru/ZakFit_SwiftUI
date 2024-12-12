@@ -8,9 +8,9 @@
 
 import Foundation
 
-class UserWeightViewModel : ObservableObject {
-    @Published var userWeights : [UserWeight] = []
-    let baseUrl : String = "http://127.0.0.1:8081/userWeights/"
+class PhysicalActivityViewModel : ObservableObject {
+    @Published var physicalActivitys : [PhysicalActivity] = []
+    let baseUrl : String = "http://127.0.0.1:8081/physicalActivitys/"
     
     func fetch() {
         guard let url = URL(string: "\(baseUrl)") else {
@@ -34,9 +34,9 @@ class UserWeightViewModel : ObservableObject {
                 do {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .iso8601
-                    let decodedUserWeights = try decoder.decode([UserWeight].self, from: data)
+                    let decodedPhysicalActivitys = try decoder.decode([PhysicalActivity].self, from: data)
                     DispatchQueue.main.async {
-                        self.userWeights = decodedUserWeights.sorted(by: { $0.date > $1.date })
+                        self.physicalActivitys = decodedPhysicalActivitys.sorted(by: { $0.date > $1.date })
                     }
                 } catch {
                     print("Error decoding data : \(error)")

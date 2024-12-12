@@ -15,10 +15,10 @@ class User : Identifiable, Codable {
     var size : Double
     var birthday : Date
     var notificationTime : String
-    var idFoodPeference : UUID?
+    var idFoodPreference : UUID?
     var idGender : UUID?
     
-    init(id: UUID? = nil, name: String, firstname: String, email: String, size: Double, birthday: Date, notificationTime: String) {
+    init(id: UUID? = nil, name: String, firstname: String, email: String, size: Double, birthday: Date, notificationTime: String, idFoodPreference: UUID? = nil, idGender: UUID? = nil) {
         self.id = id ?? UUID()
         self.name = name
         self.firstname = firstname
@@ -26,6 +26,8 @@ class User : Identifiable, Codable {
         self.size = size
         self.birthday = birthday
         self.notificationTime = notificationTime
+        self.idFoodPreference = idFoodPreference
+        self.idGender = idGender
     }
     
     func verifyName() -> Bool {

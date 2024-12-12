@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ActivityType: Identifiable {
+class ActivityType: Identifiable, Codable {
     var id: UUID?
     var name: String
     var caloriesBurnedPerHour: Double
