@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Intensity: Identifiable, Codable, Hashable {
+struct Intensity: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
 

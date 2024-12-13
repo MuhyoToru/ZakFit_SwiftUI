@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ActivityType: Identifiable, Codable {
+struct ActivityType: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
     var caloriesBurnedPerHour: Double
@@ -18,5 +18,16 @@ class ActivityType: Identifiable, Codable {
         self.name = name
         self.caloriesBurnedPerHour = caloriesBurnedPerHour
         self.image = image
+    }
+    
+    static func == (lhs: ActivityType, rhs: ActivityType) -> Bool {
+        return lhs.name == rhs.name && lhs.id == rhs.id && lhs.caloriesBurnedPerHour == rhs.caloriesBurnedPerHour && lhs.image == rhs.image
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(id)
+        hasher.combine(caloriesBurnedPerHour)
+        hasher.combine(image)
     }
 }

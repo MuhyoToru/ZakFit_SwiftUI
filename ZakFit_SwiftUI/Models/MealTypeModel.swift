@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MealType: Identifiable {
+struct MealType: Identifiable {
     var id: UUID?
     var name: String
 

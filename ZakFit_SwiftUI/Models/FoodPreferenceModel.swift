@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FoodPreference: Identifiable, Codable, Hashable {
+struct FoodPreference: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
 

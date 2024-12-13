@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Gender: Identifiable, Codable, Hashable {
+struct Gender: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
 

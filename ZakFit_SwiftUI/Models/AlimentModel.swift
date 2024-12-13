@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Aliment: Identifiable {
+class Aliment: Identifiable {
     var id: UUID?
     var name: String
     var description: String

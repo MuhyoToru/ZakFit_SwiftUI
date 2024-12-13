@@ -9,11 +9,12 @@ import SwiftUI
 
 struct DatePickerExView: View {
     var datePickerTitle : String
-    @Binding var birthDate : Date
+    @Binding var date : Date
+    let timeInterval : TimeInterval = 60 * 60 * 24 * 365
     
     var body: some View {
         VStack {
-            DatePicker(selection: $birthDate, in: ...Date.now, displayedComponents: .date) {
+            DatePicker(selection: $date, in: ...(Date.now + timeInterval), displayedComponents: .date) {
                 Text(datePickerTitle)
                     .bold()
             }
@@ -22,5 +23,5 @@ struct DatePickerExView: View {
 }
 
 #Preview {
-    DatePickerExView(datePickerTitle: "Date de naissance", birthDate: .constant(Date.now))
+    DatePickerExView(datePickerTitle: "Date de naissance", date: .constant(Date.now))
 }

@@ -12,7 +12,12 @@ struct RegisterView: View {
     @EnvironmentObject var genderViewModel: GenderViewModel
     @EnvironmentObject var foodPreferenceViewModel: FoodPreferenceViewModel
     @Binding var selectedButton : String
+    @State var name : String = ""
+    @State var firstname : String = ""
+    @State var email : String = ""
+    @State var birthday : Date = Date.now
     @State var size : String = ""
+    @State var notificationTime : String = "18:00"
     @State var password : String = ""
     @State var confirmPassword : String = ""
     
@@ -20,10 +25,10 @@ struct RegisterView: View {
     
     var body: some View {
         VStack {
-            TextFieldExView(textFieldTitle: "Nom", textInTextField: $userViewModel.user.name)
-            TextFieldExView(textFieldTitle: "Prénom", textInTextField: $userViewModel.user.firstname)
-            TextFieldExView(textFieldTitle: "Email", textInTextField: $userViewModel.user.email)
-            DatePickerExView(datePickerTitle: "Date de naissance", birthDate: $userViewModel.user.birthday)
+            TextFieldExView(textFieldTitle: "Nom", textInTextField: $name)
+            TextFieldExView(textFieldTitle: "Prénom", textInTextField: $firstname)
+            TextFieldExView(textFieldTitle: "Email", textInTextField: $email)
+            DatePickerExView(datePickerTitle: "Date de naissance", date: $birthday)
             GenderPickerExView(pickerTitle: "Genre")
             NumberFieldExView(textFieldTitle: "Taille", textUnit: "m", textInTextField: $size)
             FoodPreferencePickerExView(pickerTitle: "Préférence alimentaire")
@@ -38,35 +43,37 @@ struct RegisterView: View {
             }
             Spacer()
             Button(action: {
+                let tempUser : User = User(name: name, firstname: firstname, email: email, size: Double(size) ?? 0, birthday: birthday, notificationTime: notificationTime, idFoodPreference: foodPreferenceViewModel.selectedCategory.id, idGender: genderViewModel.selectedCategory.id)
+                
                 errorMessage = ""
                 
-                errorMessage = userViewModel.user.verifyPassword(password: password)
+                errorMessage = tempUser.verifyPassword(password: password)
                 if errorMessage == "ok" {
                     errorMessage = ""
                 }
                 
-                if !userViewModel.user.verifyPasswordConfirmation(password: password, confirmPassword: confirmPassword) {
+                if !tempUser.verifyPasswordConfirmation(password: password, confirmPassword: confirmPassword) {
                     errorMessage = "Mauvaise confirmation de Mot de passe"
                 }
                 
-                if !userViewModel.user.verifySize(size: size) {
+                if !tempUser.verifySize(size: size) {
                     errorMessage = "Taille invalide, doit être supérieur à 0"
                 }
                 
-                if !userViewModel.user.verifyEmail() {
+                if !tempUser.verifyEmail() {
                     errorMessage = "Email invalide"
                 }
                 
-                if !userViewModel.user.verifyFirstname() {
+                if !tempUser.verifyFirstname() {
                     errorMessage = "Prénom invalide, veuillez remplir le champ"
                 }
                 
-                if !userViewModel.user.verifyName() {
+                if !tempUser.verifyName() {
                     errorMessage = "Nom invalide, veuillez remplir le champ"
                 }
                 
                 if errorMessage == "" {
-                    userViewModel.register(name: userViewModel.user.name, firstname: userViewModel.user.firstname, email: userViewModel.user.email, size: userViewModel.user.size, birthday: userViewModel.user.birthday, notificationTime: userViewModel.user.notificationTime, password: password, idFoodPreference: foodPreferenceViewModel.selectedCategory.id!, idGender: genderViewModel.selectedCategory.id!)
+                    userViewModel.register(user: tempUser, password: password)
                     selectedButton = "Connexion"
                 }
             }, label: {
@@ -74,9 +81,9 @@ struct RegisterView: View {
             })
         }
         .onAppear {
-            userViewModel.user.name = "Cilluffo"
-            userViewModel.user.firstname = "Pierre"
-            userViewModel.user.email = "pierreTest@gmail.com"
+            name = "Cilluffo"
+            firstname = "Pierre"
+            email = "pierreTest@gmail.com"
             size = "1.69"
             password = "AZer12+="
             confirmPassword = "AZer12+="

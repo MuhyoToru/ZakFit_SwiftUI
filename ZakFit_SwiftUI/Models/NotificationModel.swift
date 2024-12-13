@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Notification: Identifiable {
+struct Notification: Identifiable {
     var id: UUID?
     var message: String
     var idNotificationType: UUID

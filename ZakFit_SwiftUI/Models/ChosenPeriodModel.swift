@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChosenPeriod: Identifiable {
+struct ChosenPeriod: Identifiable {
     var id: UUID?
     var name: String
 

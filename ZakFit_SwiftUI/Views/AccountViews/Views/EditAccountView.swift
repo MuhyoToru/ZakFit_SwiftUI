@@ -12,10 +12,16 @@ struct EditAccountView: View {
     @EnvironmentObject var genderViewModel : GenderViewModel
     @EnvironmentObject var userWeightViewModel : UserWeightViewModel
     @EnvironmentObject var foodPreferenceViewModel : FoodPreferenceViewModel
-    @State var tempUser : User = User(name: "", firstname: "", email: "", size: 0, birthday: Date.now, notificationTime: "18:00")
-    @State var tempWeight : UserWeight = UserWeight(weight: 0, date: Date.now)
+//    @State var tempUser : User = User(name: "", firstname: "", email: "", size: 0, birthday: Date.now, notificationTime: "18:00")
+//    @State var tempWeight : UserWeight = UserWeight(weight: 0, date: Date.now)
+    @State var name : String = ""
+    @State var firstname : String = ""
+    @State var email : String = ""
     @State var size : String = ""
+    @State var birthday : Date = Date.now
+    @State var notificationTime : String = "18:00"
     @State var weight : String = ""
+    @State var dateWeight : Date = Date.now
     @State var errorMessage : String = ""
     @State var animate : Bool = false
     
@@ -27,13 +33,13 @@ struct EditAccountView: View {
                 VStack(alignment: .leading) {
                     ErrorMessageExView(errorMessage: $errorMessage)
                     TitleExView(imageSystem: "person.fill", title: "Nom")
-                    TextFieldExView(textFieldTitle: "Nom", textInTextField: $tempUser.name)
+                    TextFieldExView(textFieldTitle: "Nom", textInTextField: $name)
                     TitleExView(imageSystem: "person.fill", title: "Prénom")
-                    TextFieldExView(textFieldTitle: "Prénom", textInTextField: $tempUser.firstname)
+                    TextFieldExView(textFieldTitle: "Prénom", textInTextField: $firstname)
                     TitleExView(imageSystem: "at", title: "Email")
-                    TextFieldExView(textFieldTitle: "Email", textInTextField: $tempUser.email)
+                    TextFieldExView(textFieldTitle: "Email", textInTextField: $email)
                     TitleExView(imageSystem: "calendar", title: "Date de naissance")
-                    DatePickerExView(datePickerTitle: "Date de naissance", birthDate: $tempUser.birthday)
+                    DatePickerExView(datePickerTitle: "", date: $birthday)
                     TitleExView(imageSystem: "figure.arms.open", title: "Taille")
                     NumberFieldExView(textFieldTitle: "Taille", textUnit: "m", textInTextField: $size)
                     TitleExView(imageSystem: "figure", title: "Poids")
@@ -47,6 +53,9 @@ struct EditAccountView: View {
                 .padding()
             }
             Button(action: {
+                let tempUser : User = User(name: name, firstname: firstname, email: email, size: Double(size) ?? 0, birthday: birthday, notificationTime: notificationTime,idFoodPreference: foodPreferenceViewModel.selectedCategory.id, idGender: genderViewModel.selectedCategory.id)
+                let tempWeight : UserWeight = UserWeight(weight: Double(weight) ?? 0, date: dateWeight, idUser: userViewModel.user.id)
+                
                 errorMessage = ""
                 
                 if !tempUser.verifySize(size: size) {
@@ -71,8 +80,6 @@ struct EditAccountView: View {
                 }
                 
                 if errorMessage == "" {
-                    tempUser.idGender = genderViewModel.selectedCategory.id
-                    tempUser.idFoodPreference = foodPreferenceViewModel.selectedCategory.id
                     userViewModel.update(user: tempUser)
                     
                     if userWeightViewModel.userWeights.first!.verifyDate() {
@@ -90,17 +97,14 @@ struct EditAccountView: View {
         }
         .navigationTitle("Editer Compte")
         .onAppear(perform: {
-            tempUser.name = userViewModel.user.name
-            tempUser.firstname = userViewModel.user.firstname
-            tempUser.email = userViewModel.user.email
-            tempUser.birthday = userViewModel.user.birthday
-            tempUser.size = userViewModel.user.size
-            size = String(tempUser.size)
-            tempUser.notificationTime = userViewModel.user.notificationTime
+            name = userViewModel.user.name
+            firstname = userViewModel.user.firstname
+            email = userViewModel.user.email
+            birthday = userViewModel.user.birthday
+            size = String(userViewModel.user.size)
+            notificationTime = userViewModel.user.notificationTime
             
-            tempWeight.weight = userWeightViewModel.userWeights.first?.weight ?? 0
-            weight = String(tempWeight.weight)
-            tempWeight.idUser = userViewModel.user.id
+            weight = String(userWeightViewModel.userWeights.first?.weight ?? 0)
             
             genderViewModel.selectedCategory = genderViewModel.genders.first {
                 $0.id == userViewModel.user.idGender

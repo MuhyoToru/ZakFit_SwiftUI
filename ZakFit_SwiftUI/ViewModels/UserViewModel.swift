@@ -13,7 +13,7 @@ class UserViewModel: ObservableObject {
     
     private let baseUrl: String = "http://127.0.0.1:8081/users/"
     
-    func register(name: String, firstname: String, email : String, size: Double, birthday: Date, notificationTime : String, password : String, idFoodPreference : UUID, idGender: UUID) {
+    func register(user : User, password : String) {
         //Configurer l'url
         let url = URL(string : baseUrl)!
         var request = URLRequest(url: url)
@@ -24,7 +24,7 @@ class UserViewModel: ObservableObject {
         
         //Ajouter les identifiants dans le body
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: ["name" : name, "firstname" : firstname, "email": email, "size": size, "birthday": ISO8601DateFormatter().string(from: birthday), "notificationTime": notificationTime, "password": password, "idFoodPreference": idFoodPreference.uuidString, "idGender": idGender.uuidString])
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["name" : user.name, "firstname" : user.firstname, "email": user.email, "size": user.size, "birthday": ISO8601DateFormatter().string(from: user.birthday), "notificationTime": user.notificationTime, "password": password, "idFoodPreference": user.idFoodPreference!.uuidString, "idGender": user.idGender!.uuidString])
         } catch {
             fatalError("Erreur de serialisation en JSON")
         }

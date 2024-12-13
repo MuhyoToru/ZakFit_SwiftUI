@@ -36,7 +36,7 @@ class PhysicalActivityViewModel : ObservableObject {
                     decoder.dateDecodingStrategy = .iso8601
                     let decodedPhysicalActivitys = try decoder.decode([PhysicalActivity].self, from: data)
                     DispatchQueue.main.async {
-                        self.physicalActivitys = decodedPhysicalActivitys.sorted(by: { $0.date > $1.date })
+                        self.physicalActivitys = decodedPhysicalActivitys.sorted(by: { $0.date < $1.date })
                     }
                 } catch {
                     print("Error decoding data : \(error)")
@@ -47,8 +47,8 @@ class PhysicalActivityViewModel : ObservableObject {
         }.resume()
     }
     
-    func create(weight : Double) {
-        let url = URL(string : baseUrl + "create/")!
+    func update(oldPhysicalActivity : PhysicalActivity, newPhysicalActivity : PhysicalActivity) {
+        let url = URL(string : baseUrl + "update/")!
         var request = URLRequest(url: url)
 
         request.httpMethod = "POST"
@@ -62,7 +62,7 @@ class PhysicalActivityViewModel : ObservableObject {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: ["weight": weight, "date": ISO8601DateFormatter().string(from: Date.now)])
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["id": oldPhysicalActivity.id!.uuidString, "duration": newPhysicalActivity.duration, "date": ISO8601DateFormatter().string(from: newPhysicalActivity.date), "caloriesBurned" : newPhysicalActivity.caloriesBurned, "idUser": newPhysicalActivity.idUser.uuidString, "idIntensity": newPhysicalActivity.idIntensity.uuidString, "idActivityType": newPhysicalActivity.idActivityType.uuidString])
         } catch {
             fatalError("Erreur de serialisation en JSON")
         }
@@ -70,17 +70,17 @@ class PhysicalActivityViewModel : ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             let responseHTTP = response as? HTTPURLResponse
             if  responseHTTP?.statusCode != 200 {
-                print("Creation UserWeight failed")
+                print("Update PhysicalActivity failed")
                 return
             }
-            print("Creation UserWeight successful")
+            print("Update PhysicalActivity successful")
             
             self.fetch()
         }.resume()
     }
     
-    func update(userWeight: UserWeight, newWeight : Double) {
-        guard let url = URL(string: baseUrl + "update/") else {
+    func create(physicalActivity : PhysicalActivity) {
+        guard let url = URL(string: baseUrl + "create/") else {
             print("Invalid URL")
             return
         }
@@ -97,7 +97,7 @@ class PhysicalActivityViewModel : ObservableObject {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: ["id": userWeight.id!.uuidString,"weight": newWeight, "date": ISO8601DateFormatter().string(from: userWeight.date)])
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["duration": physicalActivity.duration, "date": ISO8601DateFormatter().string(from: physicalActivity.date), "caloriesBurned" : physicalActivity.caloriesBurned, "idUser": physicalActivity.idUser.uuidString, "idIntensity": physicalActivity.idIntensity.uuidString, "idActivityType": physicalActivity.idActivityType.uuidString])
         } catch {
             fatalError("Erreur de serialisation en JSON")
         }
@@ -105,10 +105,10 @@ class PhysicalActivityViewModel : ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             let responseHTTP = response as? HTTPURLResponse
             if  responseHTTP?.statusCode != 200 {
-                print("Update failed")
+                print("Creation PhysicalActivity failed")
                 return
             }
-            print("Update successful")
+            print("Creation PhysicalActivity successful")
             
             self.fetch()
         }.resume()

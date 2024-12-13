@@ -9,47 +9,67 @@ import SwiftUI
 
 struct ActivitysView: View {
     @EnvironmentObject var physicalActivityViewModel : PhysicalActivityViewModel
+    @EnvironmentObject var activityTypeViewModel : ActivityTypeViewModel
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                TitleExView(title: "Prochainement")
-                ScrollView(.horizontal) {
-                    ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
-                        Button(action: {
-                            
-                        }, label: {
-                            PhysicalAvtivityDisplayExView(physicalActivity: physicalActivity)
-                        })
+            ScrollView() {
+                VStack(alignment : .leading) {
+                    TitleExView(title: "Prochainement")
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
+                                if physicalActivity.date > Date.now {
+                                    NavigationLink(destination: {
+                                        ActivityDetails(physicalActivity: physicalActivity)
+                                    }, label: {
+                                        NextPhysicalActivityDisplayExView(physicalActivity: physicalActivity)
+                                    })
+                                }
+                            }
+                            .padding(4)
+                        }
                     }
-                    .padding()
+                    .scrollIndicators(.hidden)
                 }
-                Button(action: {
-                    
+                NavigationLink(destination: {
+                    AddActivityView()
                 }, label: {
                     GeneralButtonDisplayExView(textToDisplay: "Ajouter", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "plus")
                 })
-                TitleExView(title: "Recommandations")
-                ScrollView(.horizontal) {
-                    ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
-                        Button(action: {
-                            
-                        }, label: {
-                            PhysicalAvtivityDisplayExView(physicalActivity: physicalActivity)
-                        })
+                VStack(alignment : .leading) {
+                    TitleExView(title: "Recommandations")
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(activityTypeViewModel.activityTypes) { activityType in
+                                Button(action: {
+                                    
+                                }, label: {
+                                    ActivityTypeDisplayExView(activityType: activityType)
+                                })
+                            }
+                            .padding(4)
+                        }
                     }
-                    .padding()
+                    .scrollIndicators(.hidden)
                 }
-                TitleExView(title: "Dernières activités faites")
-                ScrollView(.horizontal) {
-                    ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
-                        Button(action: {
-                            
-                        }, label: {
-                            PhysicalAvtivityDisplayExView(physicalActivity: physicalActivity)
-                        })
+                VStack(alignment : .leading) {
+                    TitleExView(title: "Dernières activités faites")
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
+                                if physicalActivity.date < Date.now {
+                                    Button(action: {
+                                        
+                                    }, label: {
+                                        PastPhysicalActivityDisplayExView(physicalActivity: physicalActivity)
+                                    })
+                                }
+                            }
+                            .padding(4)
+                        }
                     }
-                    .padding()
+                    .scrollIndicators(.hidden)
                 }
             }
             .padding()
