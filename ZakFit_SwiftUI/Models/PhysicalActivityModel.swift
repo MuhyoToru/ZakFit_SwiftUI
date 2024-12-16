@@ -42,7 +42,22 @@ class PhysicalActivity: Identifiable, Codable {
         return true
     }
     
-    func verifyCaloriesBurned() {
-        print(caloriesBurned)
+    func calculateCaloriesBurned(caloriesBurnedPerHour : Double, intensity : String) {
+        var multiplicator : Double = 0
+        
+        switch intensity {
+        case "Calme":
+            multiplicator = 0.8
+        case "Modéré":
+            multiplicator = 1
+        case "Intense":
+            multiplicator = 1.1
+        case "Très intense":
+            multiplicator = 1.2
+        default :
+            multiplicator = 0
+        }
+        
+        self.caloriesBurned = caloriesBurnedPerHour * duration * multiplicator
     }
 }

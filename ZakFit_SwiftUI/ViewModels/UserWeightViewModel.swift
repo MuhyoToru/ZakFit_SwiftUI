@@ -10,7 +10,7 @@ import Foundation
 
 class UserWeightViewModel : ObservableObject {
     @Published var userWeights : [UserWeight] = []
-    let baseUrl : String = "http://127.0.0.1:8081/userWeights/"
+    private let baseUrl : String = "http://127.0.0.1:8081/userWeights/"
     
     func fetch() {
         guard let url = URL(string: "\(baseUrl)") else {

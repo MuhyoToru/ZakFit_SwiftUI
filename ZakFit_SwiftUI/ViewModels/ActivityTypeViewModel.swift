@@ -10,7 +10,7 @@ import Foundation
 class ActivityTypeViewModel : ObservableObject {
     @Published var activityTypes : [ActivityType] = []
     @Published var selectedCategory : ActivityType = ActivityType(name: "Aucune activité", caloriesBurnedPerHour: 0, image: "ZF_fullLogo")
-    let baseUrl : String = "http://127.0.0.1:8081/activityTypes/"
+    private let baseUrl : String = "http://127.0.0.1:8081/activityTypes/"
     
     func fetch() {
         guard let url = URL(string: "\(baseUrl)") else {

@@ -1,16 +1,17 @@
 //
-//  PhysicalAvtivityButtonExView.swift
+//  MealExView.swift
 //  ZakFit_SwiftUI
 //
-//  Created by Apprenant 141 on 11/12/2024.
+//  Created by Apprenant 141 on 13/12/2024.
 //
 
 import SwiftUI
 
-struct ActivityTypeDisplayExView: View {
-    var activityType : ActivityType
+struct MealExView: View {
+    @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
+    @State var meal : Meal?
     var buttonHeight : CGFloat = 120
-    var buttonWidth : CGFloat = 120
+    var buttonWidth : CGFloat = 80
     var lineHeight : CGFloat = 6
     var cornerRadius : CGFloat = 10
     
@@ -20,7 +21,7 @@ struct ActivityTypeDisplayExView: View {
                 .fill(.zfMediumGray)
                 .offset(y : 4)
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string: activityType.image)) { image in
+                AsyncImage(url: URL(string : meal?.name ?? "No Value")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -29,9 +30,10 @@ struct ActivityTypeDisplayExView: View {
                             UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
                         )
                 } placeholder: {
-                    Image("ZF_noImage")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+                    Image(systemName: "plus")
+                        .foregroundStyle(.zfOrange)
+                        .bold()
+                        .font(.system(size: buttonHeight * 0.4))
                         .frame(width : buttonWidth, height : (buttonHeight/3*2) - lineHeight)
                         .clipShape(
                             UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
@@ -44,7 +46,9 @@ struct ActivityTypeDisplayExView: View {
                     UnevenRoundedRectangle(topLeadingRadius:0, bottomLeadingRadius: cornerRadius, bottomTrailingRadius: cornerRadius, topTrailingRadius: 0)
                         .foregroundStyle(.white)
                         .frame(height: (buttonHeight/3) - lineHeight)
-                    Text(activityType.name)
+                    Text(mealTypeViewModel.mealTypes.first(where: {
+                        $0.id == meal?.idMealType
+                    })?.name ?? "No Value")
                     .bold()
                     .foregroundStyle(.black)
                 }
@@ -54,5 +58,5 @@ struct ActivityTypeDisplayExView: View {
 }
 
 #Preview {
-    PhysicalActivityDisplayExView(physicalActivity: PhysicalActivity(date: Date.now, duration: 0, caloriesBurned: 0, idUser: UUID(), idIntensity: UUID(), idActivityType: UUID()))
+    MealExView()
 }

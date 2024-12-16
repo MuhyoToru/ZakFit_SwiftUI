@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct AddActivityView: View {
+struct AddSpecificActivityView: View {
     @EnvironmentObject var userViewModel : UserViewModel
     @EnvironmentObject var intensityViewModel : IntensityViewModel
-    @EnvironmentObject var activityTypeViewModel : ActivityTypeViewModel
     @EnvironmentObject var physicalActivityViewModel : PhysicalActivityViewModel
+    var activityType : ActivityType
     @State var date : Date = Date.now
     @State var duration : String = ""
     @State var caloriesBurned : String = ""
@@ -21,9 +21,21 @@ struct AddActivityView: View {
     
     var body: some View {
         VStack {
+            Text(activityType.name)
+                .bold()
+                .font(.title)
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.zfOrange)
+                            .offset(y : 4)
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                    }
+                        .padding(-8)
+                )
+                .padding()
             VStack(alignment: .leading) {
-                TitleExView(title: "Activité")
-                ActivityTypePickerExView(pickerTitle: "")
                 TitleExView(imageSystem: "calendar", title: "Date de l'activité")
                 DatePickerExView(datePickerTitle: "", date: $date)
                 TitleExView(title: "Durée de l'activité")
@@ -39,7 +51,7 @@ struct AddActivityView: View {
             }
             Spacer()
             Button(action: {
-                let tempsPhysicalActivity : PhysicalActivity = PhysicalActivity(date: date, duration: Double(duration) ?? 0, caloriesBurned: Double(caloriesBurned) ?? 0, idUser: userViewModel.user.id!, idIntensity: intensityViewModel.selectedCategory.id!, idActivityType: activityTypeViewModel.selectedCategory.id!)
+                let tempsPhysicalActivity : PhysicalActivity = PhysicalActivity(date: date, duration: Double(duration) ?? 0, caloriesBurned: Double(caloriesBurned) ?? 0, idUser: userViewModel.user.id!, idIntensity: intensityViewModel.selectedCategory.id!, idActivityType: activityType.id!)
                 
                 errorMessage = ""
                 
@@ -51,6 +63,12 @@ struct AddActivityView: View {
                     errorMessage = "Mauvaise Durée, veuillez rentrer une durée supérieur à 0"
                 }
                 
+                if errorMessage == "" && Double(caloriesBurned) ?? 0 <= 0{
+                    tempsPhysicalActivity.calculateCaloriesBurned(caloriesBurnedPerHour: activityType.caloriesBurnedPerHour, intensity : intensityViewModel.intensitys.first(where: {
+                        $0.id == tempsPhysicalActivity.idIntensity
+                    })?.name ?? "Pas d'intensité")
+                }
+                    
                 if errorMessage == "" {
                     physicalActivityViewModel.create(physicalActivity: tempsPhysicalActivity)
                     dismiss()
@@ -60,10 +78,10 @@ struct AddActivityView: View {
             })
         }
         .padding()
-        .navigationTitle("Ajouter une activité")
+        .navigationTitle("Ajouter une séance de :")
     }
 }
 
 #Preview {
-    AddActivityView()
+    AddSpecificActivityView(activityType: ActivityType(name: "", caloriesBurnedPerHour: 0, image: ""))
 }

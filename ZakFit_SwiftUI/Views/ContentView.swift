@@ -10,9 +10,6 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var userViewModel : UserViewModel
     @EnvironmentObject var userWeightViewModel : UserWeightViewModel
-    @State var userWeight : UserWeight = UserWeight(weight: 0, date: Date.now, idUser: UUID())
-    @State var weight : String = ""
-    @State var errorMessage : String = ""
     
     var body: some View {
         if userViewModel.isLoggedIn {
@@ -22,10 +19,10 @@ struct ContentView: View {
                         ActivitysView()
                     }
                     Tab("Repas", systemImage: "carrot") {
-                        AccountView()
+                        MealsView()
                     }
                     Tab("Objectifs", systemImage: "trophy") {
-                        AccountView()
+                        MealsView()
                     }
                     Tab("Compte", systemImage: "person") {
                         AccountView()
@@ -39,7 +36,10 @@ struct ContentView: View {
                 userWeightViewModel.fetch()
             })
         } else {
-            AuthentificationSelectionView()
+            ZStack {
+                AuthentificationSelectionView()
+                SplashView()
+            }
         }
         
     }

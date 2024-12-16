@@ -10,7 +10,7 @@ import Foundation
 class IntensityViewModel : ObservableObject {
     @Published var intensitys : [Intensity] = []
     @Published var selectedCategory : Intensity = Intensity(name: "Aucune Sélection")
-    let baseUrl : String = "http://127.0.0.1:8081/intensitys/"
+    private let baseUrl : String = "http://127.0.0.1:8081/intensitys/"
     
     func fetch() {
         guard let url = URL(string: "\(baseUrl)") else {

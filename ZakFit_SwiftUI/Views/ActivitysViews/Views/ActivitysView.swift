@@ -42,8 +42,8 @@ struct ActivitysView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(activityTypeViewModel.activityTypes) { activityType in
-                                Button(action: {
-                                    
+                                NavigationLink(destination: {
+                                    AddSpecificActivityView(activityType: activityType)
                                 }, label: {
                                     ActivityTypeDisplayExView(activityType: activityType)
                                 })
@@ -59,8 +59,8 @@ struct ActivitysView: View {
                         HStack {
                             ForEach(physicalActivityViewModel.physicalActivitys) { physicalActivity in
                                 if physicalActivity.date < Date.now {
-                                    Button(action: {
-                                        
+                                    NavigationLink(destination: {
+                                        ActivityDetails(physicalActivity: physicalActivity)
                                     }, label: {
                                         PastPhysicalActivityDisplayExView(physicalActivity: physicalActivity)
                                     })
