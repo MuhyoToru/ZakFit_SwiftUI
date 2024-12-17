@@ -11,12 +11,18 @@ struct TitleAndTextExView: View {
     var imageSystem : String?
     var title : String
     var textToDisplay : String
+    var textUnit : String?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8){
             TitleExView(imageSystem: imageSystem, title: title)
-            Text(textToDisplay)
-                .padding(.horizontal)
+            HStack {
+                Text(textToDisplay)
+                if textUnit != nil {
+                    Text(textUnit!)
+                }
+            }
+            .padding(.horizontal)
         }
     }
 }

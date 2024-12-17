@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AlimentQuantity: Identifiable {
+class AlimentQuantity: Identifiable, Codable {
     var id: UUID?
     var quantity: Int
     var weightOrUnit: String

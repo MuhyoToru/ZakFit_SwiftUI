@@ -15,6 +15,7 @@ struct TitleExView: View {
         HStack {
             if imageSystem != nil {
                 Image(systemName: imageSystem!)
+                    .frame(width: 28)
             }
             Text(title)
         }

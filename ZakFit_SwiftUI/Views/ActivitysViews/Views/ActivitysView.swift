@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ActivitysView: View {
-    @EnvironmentObject var physicalActivityViewModel : PhysicalActivityViewModel
     @EnvironmentObject var activityTypeViewModel : ActivityTypeViewModel
+    @EnvironmentObject var physicalActivityViewModel : PhysicalActivityViewModel
     
     var body: some View {
         NavigationStack {

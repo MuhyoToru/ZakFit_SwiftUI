@@ -21,7 +21,7 @@ struct NextPhysicalActivityDisplayExView: View {
                 HStack {
                     Spacer()
                     ZStack {
-                        Text(String(difference.day ?? 0) + "J")
+                        Text(String((difference.day ?? 0) + 1) + "J")
                             .bold()
                             .foregroundStyle(.black)
                             .background(

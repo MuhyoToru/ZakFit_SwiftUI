@@ -13,17 +13,18 @@ struct GeneralButtonDisplayExView: View {
     var secondColor : Color
     var textColor : Color
     var width : CGFloat?
+    var height : CGFloat?
     var imageSystem : String?
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(secondColor)
-                .frame(height: 44)
+                .frame(height: height == nil ? 44 : height)
                 .offset(y: 4)
             RoundedRectangle(cornerRadius: 10)
                 .fill(firstColor)
-                .frame(height: 44)
+                .frame(height: height == nil ? 44 : height)
             HStack {
                 Text(textToDisplay)
                 if imageSystem != nil {

@@ -31,4 +31,12 @@ class Meal: Identifiable, Codable {
         self.idMealType = idMealType
         self.idUser = idUser
     }
+    
+    func verifyName() -> Bool {
+        if self.name == "" {
+            return false
+        }
+        
+        return true
+    }
 }

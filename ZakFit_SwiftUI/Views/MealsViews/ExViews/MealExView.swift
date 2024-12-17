@@ -10,6 +10,7 @@ import SwiftUI
 struct MealExView: View {
     @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
     @State var meal : Meal?
+    var mealType : String
     var buttonHeight : CGFloat = 120
     var buttonWidth : CGFloat = 80
     var lineHeight : CGFloat = 6
@@ -21,7 +22,7 @@ struct MealExView: View {
                 .fill(.zfMediumGray)
                 .offset(y : 4)
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string : meal?.name ?? "No Value")) { image in
+                AsyncImage(url: URL(string : meal?.image ?? "No Value")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -30,14 +31,22 @@ struct MealExView: View {
                             UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
                         )
                 } placeholder: {
-                    Image(systemName: "plus")
-                        .foregroundStyle(.zfOrange)
-                        .bold()
-                        .font(.system(size: buttonHeight * 0.4))
-                        .frame(width : buttonWidth, height : (buttonHeight/3*2) - lineHeight)
-                        .clipShape(
-                            UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
-                        )
+                    ZStack {
+                        if meal == nil {
+                            Image(systemName: "plus")
+                                .foregroundStyle(.zfOrange)
+                                .bold()
+                                .font(.system(size: buttonHeight * 0.4))
+                        } else {
+                            Image("ZF_noImage")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        }
+                    }
+                    .frame(width : buttonWidth, height : (buttonHeight/3*2) - lineHeight)
+                    .clipShape(
+                        UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
+                    )
                 }
                 Rectangle()
                     .foregroundStyle(.zfOrange)
@@ -46,17 +55,16 @@ struct MealExView: View {
                     UnevenRoundedRectangle(topLeadingRadius:0, bottomLeadingRadius: cornerRadius, bottomTrailingRadius: cornerRadius, topTrailingRadius: 0)
                         .foregroundStyle(.white)
                         .frame(height: (buttonHeight/3) - lineHeight)
-                    Text(mealTypeViewModel.mealTypes.first(where: {
-                        $0.id == meal?.idMealType
-                    })?.name ?? "No Value")
+                    Text(mealType)
                     .bold()
                     .foregroundStyle(.black)
                 }
             }
         }
+        .frame(width: buttonWidth)
     }
 }
 
 #Preview {
-    MealExView()
+    MealExView(mealType : "Déjeuner")
 }

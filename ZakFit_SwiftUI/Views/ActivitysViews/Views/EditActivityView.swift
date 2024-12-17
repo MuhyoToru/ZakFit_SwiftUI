@@ -23,15 +23,15 @@ struct EditActivityView: View {
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
-                TitleExView(title: "Activité")
+                TitleExView(imageSystem : "figure.run", title: "Activité")
                 ActivityTypePickerExView(pickerTitle: "")
                 TitleExView(imageSystem: "calendar", title: "Date de l'activité")
                 DatePickerExView(datePickerTitle: "", date: $date)
-                TitleExView(title: "Durée de l'activité")
+                TitleExView(imageSystem: "clock", title: "Durée de l'activité")
                 NumberFieldExView(textFieldTitle: "Durée de l'activité", textUnit: "h", textInTextField: $duration)
-                TitleExView(title: "Intensité")
+                TitleExView(imageSystem: "gauge.with.dots.needle.bottom.100percent", title: "Intensité")
                 IntensityPickerExView(pickerTitle: "")
-                TitleExView(title: "Nombre de calories brulées")
+                TitleExView(imageSystem : "flame.fill", title: "Nombre de calories brulées")
                 Text("Champ non obligatoire")
                     .foregroundStyle(.gray)
                     .font(.system(size: 12))
@@ -40,29 +40,29 @@ struct EditActivityView: View {
             }
             Spacer()
             Button(action: {
-                let tempsPhysicalActivity : PhysicalActivity = PhysicalActivity(date: date, duration: Double(duration) ?? 0, caloriesBurned: Double(caloriesBurned) ?? 0, idUser: userViewModel.user.id!, idIntensity: intensityViewModel.selectedCategory.id!, idActivityType: activityTypeViewModel.selectedCategory.id!)
+                let tempPhysicalActivity : PhysicalActivity = PhysicalActivity(date: date, duration: Double(duration) ?? 0, caloriesBurned: Double(caloriesBurned) ?? 0, idUser: userViewModel.user.id!, idIntensity: intensityViewModel.selectedCategory.id!, idActivityType: activityTypeViewModel.selectedCategory.id!)
                 
                 errorMessage = ""
                 
-                if !tempsPhysicalActivity.verifyDate() {
+                if !tempPhysicalActivity.verifyDate() {
                     errorMessage = "Mauvaise Date, veuillez rentrer une date qui n'est pas déjà passé"
                 }
                 
-                if !tempsPhysicalActivity.verifyDuration() {
+                if !tempPhysicalActivity.verifyDuration() {
                     errorMessage = "Mauvaise Durée, veuillez rentrer une durée supérieur à 0"
                 }
                 
                 if errorMessage == "" && Double(caloriesBurned) ?? 0 <= 0{
-                    tempsPhysicalActivity.calculateCaloriesBurned(caloriesBurnedPerHour: activityTypeViewModel.activityTypes.first(where: {
-                        $0.id == tempsPhysicalActivity.idActivityType
+                    tempPhysicalActivity.calculateCaloriesBurned(caloriesBurnedPerHour: activityTypeViewModel.activityTypes.first(where: {
+                        $0.id == tempPhysicalActivity.idActivityType
                     })?.caloriesBurnedPerHour ?? 0, intensity : intensityViewModel.intensitys.first(where: {
-                        $0.id == tempsPhysicalActivity.idIntensity
+                        $0.id == tempPhysicalActivity.idIntensity
                     })?.name ?? "Pas d'intensité")
                 }
                 
                 if errorMessage == "" {
                     Task {
-                        physicalActivityViewModel.update(oldPhysicalActivity: physicalActivity, newPhysicalActivity: tempsPhysicalActivity)
+                        physicalActivityViewModel.update(oldPhysicalActivity: physicalActivity, newPhysicalActivity: tempPhysicalActivity)
                         dismiss()
                     }
                 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Aliment: Identifiable {
+class Aliment: Identifiable, Codable {
     var id: UUID?
     var name: String
     var description: String

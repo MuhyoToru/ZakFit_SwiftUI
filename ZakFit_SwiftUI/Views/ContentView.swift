@@ -22,7 +22,7 @@ struct ContentView: View {
                         MealsView()
                     }
                     Tab("Objectifs", systemImage: "trophy") {
-                        MealsView()
+                        Text("Work in progress")
                     }
                     Tab("Compte", systemImage: "person") {
                         AccountView()
@@ -38,7 +38,7 @@ struct ContentView: View {
         } else {
             ZStack {
                 AuthentificationSelectionView()
-                SplashView()
+//                SplashView()
             }
         }
         

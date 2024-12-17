@@ -29,11 +29,12 @@ struct AccountView: View {
                             TitleAndTextExView(imageSystem: "figure.stand.dress.line.vertical.figure", title: "Genre", textToDisplay: genderViewModel.genders.first{
                                 $0.id == userViewModel.user.idGender
                             }?.name ?? "Pas de genre")
-                            TitleAndTextExView(imageSystem: "figure.arms.open", title: "Taille", textToDisplay: String(userViewModel.user.size))
-                            TitleAndTextExView(imageSystem: "figure", title: "Poids", textToDisplay: String(userWeightViewModel.userWeights.first?.weight ?? 0))
+                            TitleAndTextExView(imageSystem: "figure.arms.open", title: "Taille", textToDisplay: String(userViewModel.user.size), textUnit: "m")
+                            TitleAndTextExView(imageSystem: "figure", title: "Poids", textToDisplay: String(userWeightViewModel.userWeights.first?.weight ?? 0), textUnit: "kg")
                             TitleAndTextExView(imageSystem: "carrot.fill", title: "Préférence alimentaire", textToDisplay: foodPreferenceViewModel.foodPreferences.first{
                                 $0.id == userViewModel.user.idFoodPreference
                             }?.name ?? "Pas de préférence alimentaire")
+                            TitleAndTextExView(imageSystem: "clock", title: "Heure de notification", textToDisplay: userViewModel.user.notificationTime)
                         }
                         Spacer()
                     }

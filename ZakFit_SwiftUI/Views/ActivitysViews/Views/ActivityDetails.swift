@@ -66,7 +66,7 @@ struct ActivityDetails: View {
                     TitleAndTextExView(imageSystem: "gauge.with.dots.needle.bottom.100percent", title: "Intensité", textToDisplay: intensityViewModel.intensitys.first(where: {
                         $0.id == physicalActivity.idIntensity
                     })?.name ?? "No Activity Name")
-                    TitleAndTextExView(imageSystem: "flame.fill", title: "Calories Brulées", textToDisplay: String(physicalActivity.caloriesBurned))
+                    TitleAndTextExView(imageSystem: "flame.fill", title: "Calories Brulées", textToDisplay: String(physicalActivity.caloriesBurned), textUnit: "kcal")
                 }
                 Spacer()
             }

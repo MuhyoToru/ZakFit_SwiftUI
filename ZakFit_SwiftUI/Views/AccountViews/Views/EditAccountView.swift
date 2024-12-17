@@ -12,8 +12,6 @@ struct EditAccountView: View {
     @EnvironmentObject var genderViewModel : GenderViewModel
     @EnvironmentObject var userWeightViewModel : UserWeightViewModel
     @EnvironmentObject var foodPreferenceViewModel : FoodPreferenceViewModel
-//    @State var tempUser : User = User(name: "", firstname: "", email: "", size: 0, birthday: Date.now, notificationTime: "18:00")
-//    @State var tempWeight : UserWeight = UserWeight(weight: 0, date: Date.now)
     @State var name : String = ""
     @State var firstname : String = ""
     @State var email : String = ""
