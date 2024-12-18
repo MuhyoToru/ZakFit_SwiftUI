@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MealDetailsView: View {
     @EnvironmentObject var mealTypeViewModel: MealTypeViewModel
+    @EnvironmentObject var alimentViewModel : AlimentViewModel
     @StateObject var alimentQuantityViewModel = AlimentQuantityViewModel()
-    @StateObject var alimentViewModel = AlimentViewModel()
     @State var meal : Meal
     
     @State var dateMeal : Date = Date.now
@@ -96,6 +96,9 @@ struct MealDetailsView: View {
                         }
                         .padding(.horizontal)
                         TitleExView(imageSystem: "carrot", title: "Ingrédients")
+                        ForEach(alimentQuantityViewModel.alimentQuantitys) { alimentQuantity in
+                            AlimentQuantityDetailsExView(alimentQuantity: alimentQuantity)
+                        }
                     }
                     Spacer()
                 }
@@ -104,7 +107,7 @@ struct MealDetailsView: View {
             Spacer()
             if meal.date > Date.now {
                 NavigationLink(destination: {
-                    EditMealView(meal: meal)
+                    EditMealView(meal: meal, date: Date.now)
                 }, label: {
                     GeneralButtonDisplayExView(textToDisplay: "Editer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "pencil")
                 })
@@ -112,6 +115,8 @@ struct MealDetailsView: View {
             }
         }
         .onAppear(perform: {
+            alimentQuantityViewModel.fetchByMealId(idMeal: meal.id!)
+            
             dateMeal = meal.date
             dateMealCalendar = Calendar.current.dateComponents([.year, .month, .day], from: dateMeal)
         })

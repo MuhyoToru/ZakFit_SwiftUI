@@ -19,7 +19,7 @@ class MealViewModel : ObservableObject {
             let dateString : String = filters.date!.ISO8601Format()
             queryUrl += "date=\(dateString.split(separator: "T").first!)"
         }
-
+        
         if queryUrl != "" {
             queryUrl = "?" + queryUrl
             modifyUrl += queryUrl
@@ -64,7 +64,7 @@ class MealViewModel : ObservableObject {
     func update(oldMeal : Meal, newMeal : Meal) {
         let url = URL(string : baseUrl + "update/")!
         var request = URLRequest(url: url)
-
+        
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -88,6 +88,41 @@ class MealViewModel : ObservableObject {
                 return
             }
             print("Update Meal successful")
+            
+            self.fetch(filters: Filter())
+        }.resume()
+    }
+    
+    func create(meal : Meal) {
+        guard let url = URL(string: baseUrl + "create/") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let token = KeychainManager.getTokenFromKeychain() else {
+            print("No Token found")
+            return
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["id": meal.id!.uuidString, "name": meal.name, "date": ISO8601DateFormatter().string(from: meal.date), "totalCalories" : meal.totalCalories, "totalProteins" : meal.totalProteins, "totalCarbohydrates" : meal.totalCarbohydrates, "totalLipids" : meal.totalLipids, "idUser": meal.idUser.uuidString, "idMealType": meal.idMealType.uuidString])
+        } catch {
+            fatalError("Erreur de serialisation en JSON")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let responseHTTP = response as? HTTPURLResponse
+            if  responseHTTP?.statusCode != 200 {
+                print("Creation Meal failed")
+                return
+            }
+            print("Creation Meal successful")
             
             self.fetch(filters: Filter())
         }.resume()

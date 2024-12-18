@@ -10,15 +10,18 @@ import SwiftUI
 struct EditMealView: View {
     @EnvironmentObject var userViewModel : UserViewModel
     @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
+    @EnvironmentObject var alimentViewModel : AlimentViewModel
     @StateObject var mealViewModel = MealViewModel()
-    @State var meal : Meal // Faire que Meal soit optionelle
+    @StateObject var alimentQuantityViewModel = AlimentQuantityViewModel()
+    @State var meal : Meal?
     @State var name : String = ""
-    @State var date : Date = Date.now
+    @State var date : Date
     @State var totalCalories : String = ""
     @State var totalProteins : String = ""
     @State var totalCarbohydrates : String = ""
     @State var totalLipids : String = ""
     @State var errorMessage : String = ""
+    @State var needToBeUpdateCreate : Bool = false
     
     @Environment(\.dismiss) private var dismiss
     
@@ -34,25 +37,29 @@ struct EditMealView: View {
                     TitleExView(imageSystem: "calendar", title: "Date du repas")
                     DatePickerExView(datePickerTitle: "", date: $date)
                     TitleExView(imageSystem: "flame.fill", title: "Total de calories")
-                    Text("Champ non obligatoire")
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 12))
+                    NonObligatoryFieldExView()
                     NumberFieldExView(textFieldTitle: "Total de calories", textUnit: "cal", textInTextField: $totalCalories)
                     TitleExView(imageSystem: "flame.fill", title: "Total de protéines")
-                    Text("Champ non obligatoire")
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 12))
+                    NonObligatoryFieldExView()
                     NumberFieldExView(textFieldTitle: "Total de protéines", textUnit: "g", textInTextField: $totalProteins)
                     TitleExView(imageSystem: "flame.fill", title: "Total de glucides")
-                    Text("Champ non obligatoire")
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 12))
+                    NonObligatoryFieldExView()
                     NumberFieldExView(textFieldTitle: "Total de glucides", textUnit: "g", textInTextField: $totalCarbohydrates)
                     TitleExView(imageSystem: "flame.fill", title: "Total de lipides")
-                    Text("Champ non obligatoire")
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 12))
+                    NonObligatoryFieldExView()
                     NumberFieldExView(textFieldTitle: "Total de lipides", textUnit: "g", textInTextField: $totalLipids)
+                    HStack {
+                        TitleExView(imageSystem: "carrot.fill", title: "Ingredients")
+                        Spacer()
+                        Button(action: {
+                            alimentQuantityViewModel.alimentQuantitys.append(AlimentQuantity(quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
+                        }, label: {
+                            GeneralButtonDisplayExView(textToDisplay: "Ajouter", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 140, imageSystem: "plus")
+                        })
+                    }
+                    ForEach(alimentQuantityViewModel.alimentQuantitys) { alimentQuantity in
+                        AlimentPickerExView(needToBeUpdateCreate : $needToBeUpdateCreate, alimentQuantity: alimentQuantity, pickerTitle: "")
+                    }
                     ErrorMessageExView(errorMessage: $errorMessage)
                 }
                 .padding()
@@ -65,21 +72,14 @@ struct EditMealView: View {
                 if !tempMeal.verifyName() {
                     errorMessage = "Veuillez rentrer un nom pour votre repas"
                 }
-                //
-                //                if !tempMeal.verifyDuration() {
-                //                    errorMessage = "Mauvaise Durée, veuillez rentrer une durée supérieur à 0"
-                //                }
-                //
-                //                if errorMessage == "" && Double(caloriesBurned) ?? 0 <= 0{
-                //                    tempsPhysicalActivity.calculateCaloriesBurned(caloriesBurnedPerHour: activityTypeViewModel.activityTypes.first(where: {
-                //                        $0.id == tempsPhysicalActivity.idActivityType
-                //                    })?.caloriesBurnedPerHour ?? 0, intensity : intensityViewModel.intensitys.first(where: {
-                //                        $0.id == tempsPhysicalActivity.idIntensity
-                //                    })?.name ?? "Pas d'intensité")
-                //                }
                 
                 if errorMessage == "" {
-                    mealViewModel.update(oldMeal: meal, newMeal: tempMeal)
+                    needToBeUpdateCreate = true
+                    if meal != nil {
+                        mealViewModel.update(oldMeal: meal!, newMeal: tempMeal)
+                    } else {
+                        mealViewModel.create(meal: tempMeal)
+                    }
                     dismiss()
                 }
             }, label: {
@@ -90,20 +90,26 @@ struct EditMealView: View {
         .navigationTitle("Editer l'activité")
         .navigationBarTitleDisplayMode(.large)
         .onAppear(perform: {
-            name = meal.name
-            date = meal.date
-            totalCalories = String(meal.totalCalories)
-            totalProteins = String(meal.totalProteins)
-            totalCarbohydrates = String(meal.totalCarbohydrates)
-            totalLipids = String(meal.totalLipids)
-            
-            mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first {
-                $0.id == meal.idMealType
-            } ?? MealType(name: "Pas de période")
+            if meal != nil {
+                alimentQuantityViewModel.fetchByMealId(idMeal: meal!.id!)
+                
+                name = meal!.name
+                date = meal!.date
+                totalCalories = String(meal!.totalCalories)
+                totalProteins = String(meal!.totalProteins)
+                totalCarbohydrates = String(meal!.totalCarbohydrates)
+                totalLipids = String(meal!.totalLipids)
+                
+                mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first {
+                    $0.id == meal!.idMealType
+                } ?? MealType(name: "Pas de période")
+            } else {
+                mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first!
+            }
         })
     }
 }
 
 #Preview {
-    EditMealView(meal: Meal(name: "", image: "", date: Date.now, totalCalories: 0, totalProteins: 0, totalCarbohydrates: 0, totalLipids: 0, idMealType: UUID(), idUser: UUID()))
+    EditMealView(date: Date.now)
 }

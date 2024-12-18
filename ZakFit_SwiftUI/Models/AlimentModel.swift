@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Aliment: Identifiable, Codable {
+class Aliment: Identifiable, Codable, Hashable {
     var id: UUID?
     var name: String
     var description: String
@@ -28,5 +28,21 @@ class Aliment: Identifiable, Codable {
         self.proteins = proteins
         self.carbohydrates = carbohydrates
         self.lipids = lipids
+    }
+    
+    static func == (lhs: Aliment, rhs: Aliment) -> Bool {
+        return lhs.id == rhs.id && lhs.name == rhs.name && lhs.description == rhs.description && lhs.image == rhs.image && lhs.caloriesKg == rhs.caloriesKg && lhs.caloriesUnit == rhs.caloriesUnit && lhs.proteins == rhs.proteins && lhs.carbohydrates == rhs.carbohydrates && lhs.lipids == rhs.lipids
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(image)
+        hasher.combine(caloriesKg)
+        hasher.combine(caloriesUnit)
+        hasher.combine(proteins)
+        hasher.combine(carbohydrates)
+        hasher.combine(lipids)
     }
 }

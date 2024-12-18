@@ -17,8 +17,8 @@ struct MealsRowExViews: View {
             if mealViewModel.meals.isEmpty {
                 HStack {
                     Spacer()
-                    Button(action: {
-                        
+                    NavigationLink(destination: {
+                        EditMealView(date: dateToFetch)
                     }, label: {
                         GeneralButtonDisplayExView(textToDisplay: "Ajouter un repas pour ce jour", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 360, imageSystem: "plus")
                     })
@@ -34,7 +34,7 @@ struct MealsRowExViews: View {
                     if firstMeal != nil {
                         MealDetailsView(meal: firstMeal!)
                     } else {
-                        EditMealView(meal: Meal(name: "", image: "", date: Date.now, totalCalories: 0, totalProteins: 0, totalCarbohydrates: 0, totalLipids: 0, idMealType: UUID(), idUser: UUID()))
+                        EditMealView(date: dateToFetch)
                     }
                 }, label: {
                     MealExView(meal: firstMeal, mealType: "P'tit dej")
@@ -43,7 +43,7 @@ struct MealsRowExViews: View {
                     if secondMeal != nil {
                         MealDetailsView(meal: secondMeal!)
                     } else {
-                        EditMealView(meal: Meal(name: "", image: "", date: Date.now, totalCalories: 0, totalProteins: 0, totalCarbohydrates: 0, totalLipids: 0, idMealType: UUID(), idUser: UUID()))
+                        EditMealView(date: dateToFetch)
                     }
                 }, label: {
                     MealExView(meal: secondMeal, mealType: "Déjeuner")
@@ -52,7 +52,7 @@ struct MealsRowExViews: View {
                     if thirdMeal != nil {
                         MealDetailsView(meal: thirdMeal!)
                     } else {
-                        EditMealView(meal: Meal(name: "", image: "", date: Date.now, totalCalories: 0, totalProteins: 0, totalCarbohydrates: 0, totalLipids: 0, idMealType: UUID(), idUser: UUID()))
+                        EditMealView(date: dateToFetch)
                     }
                 }, label: {
                     MealExView(meal: thirdMeal, mealType: "Dîner")
@@ -61,7 +61,7 @@ struct MealsRowExViews: View {
                     if fourthMeal != nil {
                         MealDetailsView(meal: fourthMeal!)
                     } else {
-                        EditMealView(meal: Meal(name: "", image: "", date: Date.now, totalCalories: 0, totalProteins: 0, totalCarbohydrates: 0, totalLipids: 0, idMealType: UUID(), idUser: UUID()))
+                        EditMealView(date: dateToFetch)
                     }
                 }, label: {
                     MealExView(meal: fourthMeal, mealType: "Snack")

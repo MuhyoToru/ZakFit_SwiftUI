@@ -38,4 +38,31 @@ class AlimentViewModel : ObservableObject {
             }
         }.resume()
     }
+    
+//    func fetchByMealId(idMeal : UUID) {
+//        guard let url = URL(string: "\(baseUrl)idMeal/\(idMeal)/") else {
+//            print("Invalid URL")
+//            return
+//        }
+//        var request = URLRequest(url: url)
+//        
+//        request.httpMethod = "GET"
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        
+//        URLSession.shared.dataTask(with: url) { data, response, error in
+//            if let data = data {
+//                do {
+//                    let decodedAliments = try JSONDecoder().decode([Aliment].self, from: data)
+//                    DispatchQueue.main.async {
+//                        self.aliments = decodedAliments.sorted(by: { $0.name < $1.name })
+//                        self.selectedCategory = self.aliments.first!
+//                    }
+//                } catch {
+//                    print("Error decoding data : \(error)")
+//                }
+//            } else if let error = error {
+//                print("Error fetching data : \(error)")
+//            }
+//        }.resume()
+//    }
 }

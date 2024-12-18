@@ -31,9 +31,7 @@ struct AddActivityView: View {
                 TitleExView(title: "Intensité")
                 IntensityPickerExView(pickerTitle: "")
                 TitleExView(title: "Nombre de calories brulées")
-                Text("Champ non obligatoire")
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 12))
+                NonObligatoryFieldExView()
                 NumberFieldExView(textFieldTitle: "Nombre de calories brulées", textUnit: "cal", textInTextField: $caloriesBurned)
                 ErrorMessageExView(errorMessage: $errorMessage)
             }
