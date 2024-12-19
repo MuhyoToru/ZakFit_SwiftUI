@@ -35,7 +35,7 @@ struct MealsView: View {
                         }
                     }
                     NavigationLink(destination: {
-                        
+                        EditMealView(date: Date.now + (60 * 60 * 24 * 7))
                     }, label: {
                         GeneralButtonDisplayExView(textToDisplay: "Ajouter un repas un autre jour", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 240, height: 72, imageSystem: "plus")
                     })

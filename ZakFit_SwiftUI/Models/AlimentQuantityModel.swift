@@ -9,14 +9,33 @@ import Foundation
 
 class AlimentQuantity: Identifiable, Codable {
     var id: UUID?
-    var quantity: Int
+    var quantity: Double
     var weightOrUnit: String
     var idAliment: UUID
 
-    init(id: UUID? = nil, quantity: Int, weightOrUnit: String, idAliment: UUID) {
+    init(id: UUID? = nil, quantity: Double, weightOrUnit: String, idAliment: UUID) {
         self.id = id ?? UUID()
         self.quantity = quantity
         self.weightOrUnit = weightOrUnit
         self.idAliment = idAliment
+    }
+    
+    func verifyQuantity() -> Bool {
+        if self.quantity <= 0 {
+            return false
+        }
+        
+        return true
+    }
+    
+    func verifyWeightOrUnit() -> Bool {
+        switch self.weightOrUnit {
+        case "weight" :
+            return true
+        case "unit" :
+            return true
+        default :
+            return false
+        }
     }
 }

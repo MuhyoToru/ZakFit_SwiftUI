@@ -21,7 +21,9 @@ struct EditMealView: View {
     @State var totalCarbohydrates : String = ""
     @State var totalLipids : String = ""
     @State var errorMessage : String = ""
-    @State var needToBeUpdateCreate : Bool = false
+    @State var needToBeUpdateCreate : String = "false"
+    
+    let idMeal : UUID = UUID()
     
     @Environment(\.dismiss) private var dismiss
     
@@ -58,14 +60,14 @@ struct EditMealView: View {
                         })
                     }
                     ForEach(alimentQuantityViewModel.alimentQuantitys) { alimentQuantity in
-                        AlimentPickerExView(needToBeUpdateCreate : $needToBeUpdateCreate, alimentQuantity: alimentQuantity, pickerTitle: "")
+                        AlimentPickerExView(needToBeUpdateCreate : $needToBeUpdateCreate, alimentQuantity: alimentQuantity, pickerTitle: "", idMeal: meal == nil ? idMeal : meal!.id!)
                     }
                     ErrorMessageExView(errorMessage: $errorMessage)
                 }
                 .padding()
             }
             Button(action: {
-                let tempMeal : Meal = Meal(name: name, image: "", date: date, totalCalories: Double(totalCalories)!, totalProteins: Double(totalProteins)!, totalCarbohydrates: Double(totalCarbohydrates)!, totalLipids: Double(totalLipids)!, idMealType: mealTypeViewModel.selectedCategory.id!, idUser: userViewModel.user.id!)
+                let tempMeal : Meal = Meal(id: idMeal, name: name, image: "", date: date, totalCalories: Double(totalCalories) ?? 0, totalProteins: Double(totalProteins) ?? 0, totalCarbohydrates: Double(totalCarbohydrates) ?? 0, totalLipids: Double(totalLipids) ?? 0, idMealType: mealTypeViewModel.selectedCategory.id!, idUser: userViewModel.user.id!)
                 
                 errorMessage = ""
                 
@@ -74,13 +76,7 @@ struct EditMealView: View {
                 }
                 
                 if errorMessage == "" {
-                    needToBeUpdateCreate = true
-                    if meal != nil {
-                        mealViewModel.update(oldMeal: meal!, newMeal: tempMeal)
-                    } else {
-                        mealViewModel.create(meal: tempMeal)
-                    }
-                    dismiss()
+                    needToBeUpdateCreate = "waitingAlimentQuantity"
                 }
             }, label: {
                 GeneralButtonDisplayExView(textToDisplay: "Valider", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160)
@@ -105,6 +101,24 @@ struct EditMealView: View {
                 } ?? MealType(name: "Pas de période")
             } else {
                 mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first!
+                
+                if alimentQuantityViewModel.alimentQuantitys.isEmpty {
+                    alimentQuantityViewModel.alimentQuantitys.append(AlimentQuantity(quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
+                }
+            }
+        })
+        .onChange(of: needToBeUpdateCreate, {
+            if needToBeUpdateCreate == "verifyAlimentQuantityDone" {
+                let tempMeal : Meal = Meal(id: idMeal, name: name, image: "", date: date, totalCalories: Double(totalCalories) ?? 0, totalProteins: Double(totalProteins) ?? 0, totalCarbohydrates: Double(totalCarbohydrates) ?? 0, totalLipids: Double(totalLipids) ?? 0, idMealType: mealTypeViewModel.selectedCategory.id!, idUser: userViewModel.user.id!)
+                
+                if meal != nil {
+//                    mealViewModel.update(oldMeal: meal!, newMeal: tempMeal)
+                } else {
+                    mealViewModel.create(meal: tempMeal)
+                    needToBeUpdateCreate = "mealDone"
+                }
+                
+//                dismiss()
             }
         })
     }

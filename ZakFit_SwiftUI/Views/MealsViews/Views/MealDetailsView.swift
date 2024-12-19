@@ -21,7 +21,7 @@ struct MealDetailsView: View {
     var body: some View {
         VStack {
             ZStack {
-                AsyncImage(url: URL(string : meal.image)) { image in
+                AsyncImage(url: URL(string : meal.image ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)

@@ -84,8 +84,8 @@ class AlimentQuantityViewModel : ObservableObject {
         }.resume()
     }
     
-    func create(alimentQuantity : AlimentQuantity) {
-        guard let url = URL(string: baseUrl + "create/") else {
+    func create(alimentQuantity : AlimentQuantity, idMeal: UUID) {
+        guard let url = URL(string: baseUrl + "createWithIdMeal/" + idMeal.uuidString + "/") else {
             print("Invalid URL")
             return
         }
@@ -101,19 +101,54 @@ class AlimentQuantityViewModel : ObservableObject {
         
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-//        do {
-//            request.httpBody = try JSONSerialization.data(withJSONObject: ["duration": physicalActivity.duration, "date": ISO8601DateFormatter().string(from: physicalActivity.date), "caloriesBurned" : physicalActivity.caloriesBurned, "idUser": physicalActivity.idUser.uuidString, "idIntensity": physicalActivity.idIntensity.uuidString, "idActivityType": physicalActivity.idActivityType.uuidString])
-//        } catch {
-//            fatalError("Erreur de serialisation en JSON")
-//        }
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["id": alimentQuantity.id!.uuidString, "quantity": alimentQuantity.quantity, "weightOrUnit": alimentQuantity.weightOrUnit, "idAliment" : alimentQuantity.idAliment.uuidString])
+        } catch {
+            fatalError("Erreur de serialisation en JSON")
+        }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             let responseHTTP = response as? HTTPURLResponse
             if  responseHTTP?.statusCode != 200 {
-                print("Creation PhysicalActivity failed")
+                print("Creation AlimentQuantity failed")
                 return
             }
-            print("Creation PhysicalActivity successful")
+            print("Creation AlimentQuantity successful")
+            
+            self.fetch()
+        }.resume()
+    }
+    
+    func update(oldAlimentQuantity : AlimentQuantity, newAlimentQuantity: AlimentQuantity) {
+        guard let url = URL(string: baseUrl + "update/") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let token = KeychainManager.getTokenFromKeychain() else {
+            print("No Token found")
+            return
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["id": oldAlimentQuantity.id!.uuidString, "quantity": newAlimentQuantity.quantity, "weightOrUnit": newAlimentQuantity.weightOrUnit, "idAliment" : newAlimentQuantity.idAliment])
+        } catch {
+            fatalError("Erreur de serialisation en JSON")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let responseHTTP = response as? HTTPURLResponse
+            if  responseHTTP?.statusCode != 200 {
+                print("Update AlimentQuantity failed")
+                return
+            }
+            print("Update AlimentQuantity successful")
             
             self.fetch()
         }.resume()

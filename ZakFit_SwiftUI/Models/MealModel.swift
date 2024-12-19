@@ -10,7 +10,7 @@ import Foundation
 class Meal: Identifiable, Codable {
     var id: UUID?
     var name: String
-    var image: String
+    var image: String?
     var date: Date
     var totalCalories: Double
     var totalProteins: Double
@@ -19,10 +19,10 @@ class Meal: Identifiable, Codable {
     var idMealType: UUID
     var idUser: UUID
 
-    init(id: UUID? = nil, name: String, image: String, date: Date, totalCalories: Double, totalProteins: Double, totalCarbohydrates: Double, totalLipids: Double, idMealType: UUID, idUser: UUID) {
+    init(id: UUID? = nil, name: String, image: String? = nil, date: Date, totalCalories: Double, totalProteins: Double, totalCarbohydrates: Double, totalLipids: Double, idMealType: UUID, idUser: UUID) {
         self.id = id ?? UUID()
         self.name = name
-        self.image = image
+        self.image = image ?? ""
         self.date = date
         self.totalCalories = totalCalories
         self.totalProteins = totalProteins

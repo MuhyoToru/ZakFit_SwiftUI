@@ -23,7 +23,6 @@ class MealViewModel : ObservableObject {
         if queryUrl != "" {
             queryUrl = "?" + queryUrl
             modifyUrl += queryUrl
-            print(modifyUrl)
         }
         
         guard let url = URL(string: "\(modifyUrl)") else {
