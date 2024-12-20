@@ -11,10 +11,13 @@ struct MealDetailsView: View {
     @EnvironmentObject var mealTypeViewModel: MealTypeViewModel
     @EnvironmentObject var alimentViewModel : AlimentViewModel
     @StateObject var alimentQuantityViewModel = AlimentQuantityViewModel()
+    @StateObject var mealViewModel = MealViewModel()
     @State var meal : Meal
     
     @State var dateMeal : Date = Date.now
     @State var dateMealCalendar : DateComponents = DateComponents()
+    
+    @Environment(\.dismiss) private var dismiss
     
     var imageHeight : CGFloat = 240
     
@@ -95,7 +98,7 @@ struct MealDetailsView: View {
                             }
                         }
                         .padding(.horizontal)
-                        TitleExView(imageSystem: "carrot", title: "Ingrédients")
+                        TitleExView(imageSystem: "carrot.fill", title: "Ingrédients")
                         ForEach(alimentQuantityViewModel.alimentQuantitys) { alimentQuantity in
                             AlimentQuantityDetailsExView(alimentQuantity: alimentQuantity)
                         }
@@ -104,14 +107,20 @@ struct MealDetailsView: View {
                 }
             }
             .padding()
-            Spacer()
-            if meal.date > Date.now {
-                NavigationLink(destination: {
-                    EditMealView(meal: meal, date: Date.now)
-                }, label: {
-                    GeneralButtonDisplayExView(textToDisplay: "Editer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "pencil")
-                })
-                Spacer()
+            if meal.date > Date.now - (60 * 60 * 24) {
+                HStack {
+                    NavigationLink(destination: {
+                        EditMealView(meal: meal, date: Date.now, mealType: "")
+                    }, label: {
+                        GeneralButtonDisplayExView(textToDisplay: "Editer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "pencil")
+                    })
+                    Button(action: {
+                        mealViewModel.delete(meal: meal)
+                        dismiss()
+                    }, label: {
+                        GeneralButtonDisplayExView(textToDisplay: "Supprimer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "trash")
+                    })
+                }
             }
         }
         .onAppear(perform: {

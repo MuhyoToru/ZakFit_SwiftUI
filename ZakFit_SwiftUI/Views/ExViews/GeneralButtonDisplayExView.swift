@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GeneralButtonDisplayExView: View {
-    var textToDisplay : String
+    var textToDisplay : String?
     var firstColor : Color
     var secondColor : Color
     var textColor : Color
@@ -26,7 +26,9 @@ struct GeneralButtonDisplayExView: View {
                 .fill(firstColor)
                 .frame(height: height == nil ? 44 : height)
             HStack {
-                Text(textToDisplay)
+                if textToDisplay != nil {
+                    Text(textToDisplay!)
+                }
                 if imageSystem != nil {
                     Image(systemName: imageSystem!)
                 }

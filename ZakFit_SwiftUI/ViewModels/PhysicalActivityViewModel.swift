@@ -113,4 +113,33 @@ class PhysicalActivityViewModel : ObservableObject {
             self.fetch()
         }.resume()
     }
+    
+    func delete(physicalActivity: PhysicalActivity) {
+        guard let url = URL(string: baseUrl + "delete/" + physicalActivity.id!.uuidString) else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let token = KeychainManager.getTokenFromKeychain() else {
+            print("No Token found")
+            return
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let responseHTTP = response as? HTTPURLResponse
+            if  responseHTTP?.statusCode != 200 {
+                print("Deletion PhysicalActivity failed")
+                return
+            }
+            print("Deletion PhysicalActivity successful")
+            
+            self.fetch()
+        }.resume()
+    }
 }

@@ -18,7 +18,7 @@ class Meal: Identifiable, Codable {
     var totalLipids: Double
     var idMealType: UUID
     var idUser: UUID
-
+    
     init(id: UUID? = nil, name: String, image: String? = nil, date: Date, totalCalories: Double, totalProteins: Double, totalCarbohydrates: Double, totalLipids: Double, idMealType: UUID, idUser: UUID) {
         self.id = id ?? UUID()
         self.name = name
@@ -38,5 +38,43 @@ class Meal: Identifiable, Codable {
         }
         
         return true
+    }
+    
+    func calculateTotalCalories(alimentQuantitys : [AlimentQuantity], aliments: [Aliment]) {
+        for alimentQuantity in alimentQuantitys {
+            if alimentQuantity.weightOrUnit == "weight" {
+                self.totalCalories += alimentQuantity.quantity * (aliments.first(where: {
+                    $0.id == alimentQuantity.idAliment
+                })?.caloriesKg)!
+            } else {
+                self.totalCalories += alimentQuantity.quantity * (aliments.first(where: {
+                    $0.id == alimentQuantity.idAliment
+                })?.caloriesUnit)!
+            }
+        }
+    }
+    
+    func calculateTotalProteins(alimentQuantitys : [AlimentQuantity], aliments: [Aliment]) {
+        for alimentQuantity in alimentQuantitys {
+            self.totalProteins += alimentQuantity.quantity * (aliments.first(where: {
+                $0.id == alimentQuantity.idAliment
+            })?.proteins)!
+        }
+    }
+    
+    func calculateTotalCarbohydrates(alimentQuantitys : [AlimentQuantity], aliments: [Aliment]) {
+        for alimentQuantity in alimentQuantitys {
+            self.totalCarbohydrates += alimentQuantity.quantity * (aliments.first(where: {
+                $0.id == alimentQuantity.idAliment
+            })?.carbohydrates)!
+        }
+    }
+    
+    func calculateTotalLipids(alimentQuantitys : [AlimentQuantity], aliments: [Aliment]) {
+        for alimentQuantity in alimentQuantitys {
+            self.totalLipids += alimentQuantity.quantity * (aliments.first(where: {
+                $0.id == alimentQuantity.idAliment
+            })?.lipids)!
+        }
     }
 }

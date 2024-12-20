@@ -19,6 +19,7 @@ struct ZakFit_SwiftUIApp: App {
 //    @StateObject var mealViewModel = MealViewModel()
     @StateObject var mealTypeViewModel = MealTypeViewModel()
     @StateObject var alimentViewModel = AlimentViewModel()
+    @StateObject var aqMealLinkViewModel = AQMealLinkViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -43,5 +44,6 @@ struct ZakFit_SwiftUIApp: App {
 //        .environmentObject(mealViewModel)
         .environmentObject(mealTypeViewModel)
         .environmentObject(alimentViewModel)
+        .environmentObject(aqMealLinkViewModel)
     }
 }

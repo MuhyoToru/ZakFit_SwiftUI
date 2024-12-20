@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AlimentQuantity: Identifiable, Codable {
+class AlimentQuantity: Identifiable, Codable, Equatable {
     var id: UUID?
     var quantity: Double
     var weightOrUnit: String
@@ -18,6 +18,10 @@ class AlimentQuantity: Identifiable, Codable {
         self.quantity = quantity
         self.weightOrUnit = weightOrUnit
         self.idAliment = idAliment
+    }
+    
+    static func == (lhs: AlimentQuantity, rhs: AlimentQuantity) -> Bool {
+        return lhs.id == rhs.id && lhs.quantity == rhs.quantity && lhs.weightOrUnit == rhs.weightOrUnit && lhs.idAliment == rhs.idAliment
     }
     
     func verifyQuantity() -> Bool {

@@ -10,12 +10,15 @@ import SwiftUI
 struct ActivityDetails: View {
     @EnvironmentObject var activityTypeViewModel: ActivityTypeViewModel
     @EnvironmentObject var intensityViewModel: IntensityViewModel
+    @EnvironmentObject var physicalActivityViewModel : PhysicalActivityViewModel
     @State var physicalActivity : PhysicalActivity
     
     @State var dateActivity : Date = Date.now
     @State var dateActivityCalendar : DateComponents = DateComponents()
     
     var imageHeight : CGFloat = 240
+    
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack {
@@ -73,13 +76,22 @@ struct ActivityDetails: View {
             .padding()
             Spacer()
             if physicalActivity.date > Date.now {
-                NavigationLink(destination: {
-                    EditActivityView(physicalActivity: physicalActivity)
-                }, label: {
-                    GeneralButtonDisplayExView(textToDisplay: "Editer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "pencil")
-                })
+                HStack {
+                    NavigationLink(destination: {
+                        EditActivityView(physicalActivity: physicalActivity)
+                    }, label: {
+                        GeneralButtonDisplayExView(textToDisplay: "Editer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "pencil")
+                    })
+                    Button(action: {
+                        physicalActivityViewModel.delete(physicalActivity: physicalActivity)
+                        dismiss()
+                    }, label: {
+                        GeneralButtonDisplayExView(textToDisplay: "Supprimer", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160, imageSystem: "trash")
+                    })
+                }
                 Spacer()
-            }       }
+            }
+        }
         .onAppear(perform: {
             dateActivity = physicalActivity.date
             dateActivityCalendar = Calendar.current.dateComponents([.year, .month, .day], from: dateActivity)

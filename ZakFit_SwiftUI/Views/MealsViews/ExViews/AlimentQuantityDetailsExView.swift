@@ -10,6 +10,7 @@ import SwiftUI
 struct AlimentQuantityDetailsExView: View {
     @EnvironmentObject var alimentViewModel : AlimentViewModel
     var alimentQuantity : AlimentQuantity
+    let imageSize : CGFloat = 60
     
     var body: some View {
         HStack {
@@ -19,7 +20,7 @@ struct AlimentQuantityDetailsExView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width : 100, height : 100)
+                    .frame(width : imageSize, height : imageSize)
                     .clipShape(
                         RoundedRectangle(cornerRadius: 10)
                     )
@@ -27,11 +28,13 @@ struct AlimentQuantityDetailsExView: View {
                 Image("ZF_noImage")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width : 100, height : 100)
+                    .frame(width : imageSize, height : imageSize)
                     .clipShape(
                         RoundedRectangle(cornerRadius: 10)
                     )
             }
+            Spacer()
+                .frame(width: 16)
             Text(alimentViewModel.aliments.first(where: {
                 $0.id == alimentQuantity.idAliment
             })?.name ?? "Pas d'aliment")

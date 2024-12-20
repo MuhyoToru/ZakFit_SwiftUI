@@ -22,15 +22,19 @@ struct MealExView: View {
                 .fill(.zfMediumGray)
                 .offset(y : 4)
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string : meal?.image ?? "No Value")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width : buttonWidth, height : (buttonHeight/3*2) - lineHeight)
-                        .clipShape(
-                            UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
-                        )
-                } placeholder: {
+                if meal?.image != "" && meal != nil {
+                    AsyncImage(url: URL(string : meal!.image!)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width : buttonWidth, height : (buttonHeight/3*2) - lineHeight)
+                            .clipShape(
+                                UnevenRoundedRectangle(topLeadingRadius: cornerRadius, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: cornerRadius)
+                            )
+                    } placeholder: {
+                        //Nothing
+                    }
+                } else {
                     ZStack {
                         if meal == nil {
                             Image(systemName: "plus")
@@ -56,8 +60,8 @@ struct MealExView: View {
                         .foregroundStyle(.white)
                         .frame(height: (buttonHeight/3) - lineHeight)
                     Text(mealType)
-                    .bold()
-                    .foregroundStyle(.black)
+                        .bold()
+                        .foregroundStyle(.black)
                 }
             }
         }

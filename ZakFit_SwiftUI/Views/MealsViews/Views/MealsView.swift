@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct MealsView: View {
-//    @EnvironmentObject var mealViewModel : MealViewModel
     @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
     @State var daysArray : [Date] = []
-    
-    var numberOfDayToDisplay : Int = 7
+    @State var numberOfDayToDisplay : Int = 7
     
     var body: some View {
         NavigationStack {
@@ -35,7 +33,7 @@ struct MealsView: View {
                         }
                     }
                     NavigationLink(destination: {
-                        EditMealView(date: Date.now + (60 * 60 * 24 * 7))
+                        EditMealView(date: Date.now + TimeInterval(86400 * numberOfDayToDisplay), mealType: "")
                     }, label: {
                         GeneralButtonDisplayExView(textToDisplay: "Ajouter un repas un autre jour", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 240, height: 72, imageSystem: "plus")
                     })
@@ -49,8 +47,6 @@ struct MealsView: View {
             .scrollIndicators(.hidden)
             .navigationTitle("Repas")
             .onAppear(perform: {
-//                mealViewModel.fetch(filters: Filter())
-                
                 let time : TimeInterval = 60 * 60 * 24
                 daysArray = []
                 for i in 0...(numberOfDayToDisplay - 1) {

@@ -126,4 +126,33 @@ class MealViewModel : ObservableObject {
             self.fetch(filters: Filter())
         }.resume()
     }
+    
+    func delete(meal: Meal) {
+        guard let url = URL(string: baseUrl + "delete/" + meal.id!.uuidString) else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let token = KeychainManager.getTokenFromKeychain() else {
+            print("No Token found")
+            return
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let responseHTTP = response as? HTTPURLResponse
+            if  responseHTTP?.statusCode != 200 {
+                print("Deletion Meal failed")
+                return
+            }
+            print("Deletion Meal successful")
+            
+            self.fetch(filters: Filter())
+        }.resume()
+    }
 }

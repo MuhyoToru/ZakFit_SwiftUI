@@ -18,7 +18,7 @@ struct MealsRowExViews: View {
                 HStack {
                     Spacer()
                     NavigationLink(destination: {
-                        EditMealView(date: dateToFetch)
+                        EditMealView(date: dateToFetch, mealType: "")
                     }, label: {
                         GeneralButtonDisplayExView(textToDisplay: "Ajouter un repas pour ce jour", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 360, imageSystem: "plus")
                     })
@@ -34,7 +34,7 @@ struct MealsRowExViews: View {
                     if firstMeal != nil {
                         MealDetailsView(meal: firstMeal!)
                     } else {
-                        EditMealView(date: dateToFetch)
+                        EditMealView(date: dateToFetch, mealType: "Petit déjeuner")
                     }
                 }, label: {
                     MealExView(meal: firstMeal, mealType: "P'tit dej")
@@ -43,7 +43,7 @@ struct MealsRowExViews: View {
                     if secondMeal != nil {
                         MealDetailsView(meal: secondMeal!)
                     } else {
-                        EditMealView(date: dateToFetch)
+                        EditMealView(date: dateToFetch, mealType: "Déjeuner")
                     }
                 }, label: {
                     MealExView(meal: secondMeal, mealType: "Déjeuner")
@@ -52,7 +52,7 @@ struct MealsRowExViews: View {
                     if thirdMeal != nil {
                         MealDetailsView(meal: thirdMeal!)
                     } else {
-                        EditMealView(date: dateToFetch)
+                        EditMealView(date: dateToFetch, mealType: "Dîner")
                     }
                 }, label: {
                     MealExView(meal: thirdMeal, mealType: "Dîner")
@@ -61,7 +61,7 @@ struct MealsRowExViews: View {
                     if fourthMeal != nil {
                         MealDetailsView(meal: fourthMeal!)
                     } else {
-                        EditMealView(date: dateToFetch)
+                        EditMealView(date: dateToFetch, mealType: "Snack")
                     }
                 }, label: {
                     MealExView(meal: fourthMeal, mealType: "Snack")

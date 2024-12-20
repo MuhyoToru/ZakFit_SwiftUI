@@ -11,8 +11,10 @@ struct EditMealView: View {
     @EnvironmentObject var userViewModel : UserViewModel
     @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
     @EnvironmentObject var alimentViewModel : AlimentViewModel
+    @EnvironmentObject var aqMealLinkViewModel : AQMealLinkViewModel
     @StateObject var mealViewModel = MealViewModel()
     @StateObject var alimentQuantityViewModel = AlimentQuantityViewModel()
+    @State var tempAlimentQuantitys : [AlimentQuantity] = []
     @State var meal : Meal?
     @State var name : String = ""
     @State var date : Date
@@ -21,7 +23,7 @@ struct EditMealView: View {
     @State var totalCarbohydrates : String = ""
     @State var totalLipids : String = ""
     @State var errorMessage : String = ""
-    @State var needToBeUpdateCreate : String = "false"
+    let mealType : String
     
     let idMeal : UUID = UUID()
     
@@ -54,13 +56,13 @@ struct EditMealView: View {
                         TitleExView(imageSystem: "carrot.fill", title: "Ingredients")
                         Spacer()
                         Button(action: {
-                            alimentQuantityViewModel.alimentQuantitys.append(AlimentQuantity(quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
+                            alimentQuantityViewModel.tempAlimentQuantitys.append(AlimentQuantity(id: UUID(), quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
                         }, label: {
-                            GeneralButtonDisplayExView(textToDisplay: "Ajouter", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 140, imageSystem: "plus")
+                            GeneralButtonDisplayExView(firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 44, imageSystem: "plus")
                         })
                     }
-                    ForEach(alimentQuantityViewModel.alimentQuantitys) { alimentQuantity in
-                        AlimentPickerExView(needToBeUpdateCreate : $needToBeUpdateCreate, alimentQuantity: alimentQuantity, pickerTitle: "", idMeal: meal == nil ? idMeal : meal!.id!)
+                    ForEach($alimentQuantityViewModel.tempAlimentQuantitys) { $alimentQuantity in
+                        AlimentPickerExView(alimentQuantitys: $alimentQuantityViewModel.tempAlimentQuantitys, alimentQuantity : $alimentQuantity, pickerTitle: "")
                     }
                     ErrorMessageExView(errorMessage: $errorMessage)
                 }
@@ -71,19 +73,74 @@ struct EditMealView: View {
                 
                 errorMessage = ""
                 
+                for alimentQuantity in tempAlimentQuantitys {
+                    if !alimentQuantity.verifyQuantity() {
+                        errorMessage = "Veuillez remplir les quantités d'aliment"
+                    }
+                    
+                    if !alimentQuantity.verifyWeightOrUnit() {
+                        errorMessage = "Veuillez choisir une unité valide"
+                    }
+                }
+                
                 if !tempMeal.verifyName() {
                     errorMessage = "Veuillez rentrer un nom pour votre repas"
                 }
                 
                 if errorMessage == "" {
-                    needToBeUpdateCreate = "waitingAlimentQuantity"
+                    if tempMeal.totalCalories <= 0 {
+                        tempMeal.calculateTotalCalories(alimentQuantitys: alimentQuantityViewModel.tempAlimentQuantitys, aliments: alimentViewModel.aliments)
+                    }
+                    
+                    if tempMeal.totalProteins <= 0 {
+                        tempMeal.calculateTotalProteins(alimentQuantitys: alimentQuantityViewModel.tempAlimentQuantitys, aliments: alimentViewModel.aliments)
+                    }
+                    
+                    if tempMeal.totalCarbohydrates <= 0 {
+                        tempMeal.calculateTotalCarbohydrates(alimentQuantitys: alimentQuantityViewModel.tempAlimentQuantitys, aliments: alimentViewModel.aliments)
+                    }
+                    
+                    if tempMeal.totalLipids <= 0 {
+                        tempMeal.calculateTotalLipids(alimentQuantitys: alimentQuantityViewModel.tempAlimentQuantitys, aliments: alimentViewModel.aliments)
+                    }
+                    
+                    var tempCount = 0
+                    
+                    for tempAlimentQuantity in alimentQuantityViewModel.tempAlimentQuantitys {
+                        if alimentQuantityViewModel.alimentQuantitys.contains(where: {
+                            $0.id == tempAlimentQuantity.id
+                        }) && meal != nil {
+                            print("J'update 2 fois")
+                            print(alimentQuantityViewModel.alimentQuantitys.first(where: {
+                                $0.id == tempAlimentQuantity.id
+                            })!.idAliment)
+                            print(tempAlimentQuantity.idAliment)
+                            aqMealLinkViewModel.updateAQUpdateMeal(oldAlimentQuantity: alimentQuantityViewModel.alimentQuantitys.first(where: {
+                                $0.id == tempAlimentQuantity.id
+                            })!, newAlimentQuantity: tempAlimentQuantity, oldMeal: meal!, newMeal: tempMeal)
+                        } else if !alimentQuantityViewModel.alimentQuantitys.contains(where: {
+                            $0.id == tempAlimentQuantity.id
+                        }) && meal != nil {
+                            print("J'update 1 fois et crée 1 fois")
+                            aqMealLinkViewModel.createAQUpdateMeal(alimentQuantity: tempAlimentQuantity, oldMeal: meal!, newMeal: tempMeal)
+                        } else if tempCount == 0 {
+                            print("Je crée 2 fois")
+                            aqMealLinkViewModel.createAQCreateMeal(alimentQuantity: tempAlimentQuantity, meal: tempMeal)
+                        } else {
+                            print("Je crée juste AQ")
+                            aqMealLinkViewModel.onlyCreateAQ(alimentQuantity: tempAlimentQuantity, meal: tempMeal)
+                        }
+                        
+                        tempCount += 1
+                    }
+                    dismiss()
                 }
             }, label: {
                 GeneralButtonDisplayExView(textToDisplay: "Valider", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 160)
             })
             .padding()
         }
-        .navigationTitle("Editer l'activité")
+        .navigationTitle("Editer le repas")
         .navigationBarTitleDisplayMode(.large)
         .onAppear(perform: {
             if meal != nil {
@@ -100,30 +157,18 @@ struct EditMealView: View {
                     $0.id == meal!.idMealType
                 } ?? MealType(name: "Pas de période")
             } else {
-                mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first!
+                mealTypeViewModel.selectedCategory = mealTypeViewModel.mealTypes.first(where: {
+                    $0.name == mealType
+                }) ?? mealTypeViewModel.mealTypes.first!
                 
                 if alimentQuantityViewModel.alimentQuantitys.isEmpty {
-                    alimentQuantityViewModel.alimentQuantitys.append(AlimentQuantity(quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
+                    alimentQuantityViewModel.tempAlimentQuantitys.append(AlimentQuantity(quantity: 0, weightOrUnit: "weight", idAliment: alimentViewModel.aliments.first!.id!))
                 }
-            }
-        })
-        .onChange(of: needToBeUpdateCreate, {
-            if needToBeUpdateCreate == "verifyAlimentQuantityDone" {
-                let tempMeal : Meal = Meal(id: idMeal, name: name, image: "", date: date, totalCalories: Double(totalCalories) ?? 0, totalProteins: Double(totalProteins) ?? 0, totalCarbohydrates: Double(totalCarbohydrates) ?? 0, totalLipids: Double(totalLipids) ?? 0, idMealType: mealTypeViewModel.selectedCategory.id!, idUser: userViewModel.user.id!)
-                
-                if meal != nil {
-//                    mealViewModel.update(oldMeal: meal!, newMeal: tempMeal)
-                } else {
-                    mealViewModel.create(meal: tempMeal)
-                    needToBeUpdateCreate = "mealDone"
-                }
-                
-//                dismiss()
             }
         })
     }
 }
 
-#Preview {
-    EditMealView(date: Date.now)
-}
+//#Preview {
+//    EditMealView(date: Date.now)
+//}

@@ -9,6 +9,7 @@ import Foundation
 
 class AlimentQuantityViewModel : ObservableObject {
     @Published var alimentQuantitys : [AlimentQuantity] = []
+    @Published var tempAlimentQuantitys : [AlimentQuantity] = []
     private let baseUrl : String = "http://127.0.0.1:8081/alimentQuantitys/"
     
     func fetch() {
@@ -39,6 +40,7 @@ class AlimentQuantityViewModel : ObservableObject {
                     let decodedAlimentQuantitys = try decoder.decode([AlimentQuantity].self, from: data)
                     DispatchQueue.main.async {
                         self.alimentQuantitys = decodedAlimentQuantitys.sorted(by: { $0.quantity < $1.quantity })
+                        self.tempAlimentQuantitys = self.alimentQuantitys
                     }
                 } catch {
                     print("Error decoding data : \(error)")
@@ -74,6 +76,7 @@ class AlimentQuantityViewModel : ObservableObject {
                     let decodedAlimentQuantitys = try decoder.decode([AlimentQuantity].self, from: data)
                     DispatchQueue.main.async {
                         self.alimentQuantitys = decodedAlimentQuantitys.sorted(by: { $0.quantity < $1.quantity })
+                        self.tempAlimentQuantitys = self.alimentQuantitys
                     }
                 } catch {
                     print("Error decoding data : \(error)")
@@ -84,8 +87,8 @@ class AlimentQuantityViewModel : ObservableObject {
         }.resume()
     }
     
-    func create(alimentQuantity : AlimentQuantity, idMeal: UUID) {
-        guard let url = URL(string: baseUrl + "createWithIdMeal/" + idMeal.uuidString + "/") else {
+    func create(alimentQuantity : AlimentQuantity) {
+        guard let url = URL(string: baseUrl + "create/") else {
             print("Invalid URL")
             return
         }
