@@ -7,22 +7,33 @@
 
 import Foundation
 
-class CaloriesGoal: Identifiable {
-    var id: UUID?
+class CaloriesGoal: Goal {
     var caloriesGoal: Double
     var proteinsGoal: Double
     var carbohydratesGoal: Double
     var lipidsGoal: Double
-    var idChosenPeriod: UUID
-    var idUser: UUID
 
-    init(id: UUID? = nil, caloriesGoal: Double, proteinsGoal: Double, carbohydratesGoal: Double, lipidsGoal: Double, idChosenPeriod: UUID, idUser: UUID) {
-        self.id = id ?? UUID()
+    init(caloriesGoal: Double, proteinsGoal: Double, carbohydratesGoal: Double, lipidsGoal: Double, dateStart: Date, idChosenPeriod: UUID, idUser: UUID) {
         self.caloriesGoal = caloriesGoal
         self.proteinsGoal = proteinsGoal
         self.carbohydratesGoal = carbohydratesGoal
         self.lipidsGoal = lipidsGoal
-        self.idChosenPeriod = idChosenPeriod
-        self.idUser = idUser
+        super.init(dateStart: dateStart, idChosenPeriod: idChosenPeriod, idUser: idUser)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        caloriesGoal = try container.decode(Double.self, forKey: .caloriesGoal)
+        proteinsGoal = try container.decode(Double.self, forKey: .proteinsGoal)
+        carbohydratesGoal = try container.decode(Double.self, forKey: .carbohydratesGoal)
+        lipidsGoal = try container.decode(Double.self, forKey: .lipidsGoal)
+        try super.init(from: decoder)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case caloriesGoal
+        case proteinsGoal
+        case carbohydratesGoal
+        case lipidsGoal
     }
 }

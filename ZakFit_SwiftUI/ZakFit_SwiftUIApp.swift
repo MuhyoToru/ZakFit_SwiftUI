@@ -16,10 +16,13 @@ struct ZakFit_SwiftUIApp: App {
     @StateObject var intensityViewModel = IntensityViewModel()
     @StateObject var physicalActivityViewModel = PhysicalActivityViewModel()
     @StateObject var activityTypeViewModel = ActivityTypeViewModel()
-//    @StateObject var mealViewModel = MealViewModel()
     @StateObject var mealTypeViewModel = MealTypeViewModel()
     @StateObject var alimentViewModel = AlimentViewModel()
     @StateObject var aqMealLinkViewModel = AQMealLinkViewModel()
+    @StateObject var weightGoalViewModel = WeightGoalViewModel()
+    @StateObject var physicalActivityGoalViewModel = PhysicalActivityGoalViewModel()
+    @StateObject var caloriesGoalViewModel = CaloriesGoalViewModel()
+    @StateObject var chosenPeriodViewModel = ChosenPeriodViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -32,6 +35,7 @@ struct ZakFit_SwiftUIApp: App {
                     activityTypeViewModel.fetch()
                     mealTypeViewModel.fetch()
                     alimentViewModel.fetch()
+                    chosenPeriodViewModel.fetch()
                 })
         }
         .environmentObject(userViewModel)
@@ -41,9 +45,12 @@ struct ZakFit_SwiftUIApp: App {
         .environmentObject(intensityViewModel)
         .environmentObject(physicalActivityViewModel)
         .environmentObject(activityTypeViewModel)
-//        .environmentObject(mealViewModel)
         .environmentObject(mealTypeViewModel)
         .environmentObject(alimentViewModel)
         .environmentObject(aqMealLinkViewModel)
+        .environmentObject(weightGoalViewModel)
+        .environmentObject(physicalActivityGoalViewModel)
+        .environmentObject(caloriesGoalViewModel)
+        .environmentObject(chosenPeriodViewModel)
     }
 }

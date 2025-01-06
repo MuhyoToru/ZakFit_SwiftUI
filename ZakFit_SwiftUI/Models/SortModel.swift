@@ -7,12 +7,8 @@
 
 import Foundation
 
-class Sort {
-    var byDate : Bool
-    var byName : Bool
-    
-    init(byDate: Bool, byName: Bool) {
-        self.byDate = true
-        self.byName = false
-    }
+enum SortMethod : String {
+    case byDate = "date"
+    case byName = "name"
+    case byDuration = "duration"
 }

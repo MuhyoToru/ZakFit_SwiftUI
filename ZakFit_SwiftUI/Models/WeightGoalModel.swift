@@ -7,20 +7,21 @@
 
 import Foundation
 
-class WeightGoal: Identifiable {
-    var id: UUID?
+class WeightGoal: Goal {
     var weight: Double
-    var idChosenPeriod: UUID
-    var idUser: UUID
-
-    init(id: UUID? = nil, weight: Double, idChosenPeriod: UUID, idUser: UUID) {
-        self.id = id ?? UUID()
+    
+    init(weight: Double, dateStart: Date, idChosenPeriod: UUID, idUser: UUID) {
         self.weight = weight
-        self.idChosenPeriod = idChosenPeriod
-        self.idUser = idUser
+        super.init(dateStart: dateStart, idChosenPeriod: idChosenPeriod, idUser: idUser)
     }
     
-    func editGoals() {
-        
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        weight = try container.decode(Double.self, forKey: .weight)
+        try super.init(from: decoder)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case weight
     }
 }

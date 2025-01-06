@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PhysicalActivity: Identifiable, Codable {
+class PhysicalActivity: Identifiable, Codable, Equatable {
     var id: UUID?
     var date: Date
     var duration: Double
@@ -24,6 +24,10 @@ class PhysicalActivity: Identifiable, Codable {
         self.idUser = idUser
         self.idIntensity = idIntensity
         self.idActivityType = idActivityType
+    }
+    
+    static func == (lhs: PhysicalActivity, rhs: PhysicalActivity) -> Bool {
+        return lhs.id == rhs.id && lhs.date == rhs.date && lhs.duration == rhs.duration && lhs.caloriesBurned == rhs.caloriesBurned && lhs.idUser == rhs.idUser && lhs.idIntensity == rhs.idIntensity && lhs.idActivityType == rhs.idActivityType
     }
     
     func verifyDate() -> Bool {

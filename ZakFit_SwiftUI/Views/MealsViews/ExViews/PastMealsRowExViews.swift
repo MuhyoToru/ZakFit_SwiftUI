@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MealsRowExViews: View {
+struct PastMealsRowExViews: View {
     @EnvironmentObject var mealTypeViewModel : MealTypeViewModel
     @StateObject var mealViewModel : MealViewModel = MealViewModel()
     var dateToFetch : Date
@@ -15,15 +15,7 @@ struct MealsRowExViews: View {
     var body: some View {
         HStack {
             if mealViewModel.meals.isEmpty {
-                HStack {
-                    Spacer()
-                    NavigationLink(destination: {
-                        EditMealView(date: dateToFetch, mealType: "")
-                    }, label: {
-                        GeneralButtonDisplayExView(textToDisplay: "Ajouter un repas pour ce jour", firstColor: .zfOrange, secondColor: .zfMediumGray, textColor: .white, width: 360, imageSystem: "plus")
-                    })
-                    Spacer()
-                }
+                Text("Pas de repas mangé ce jour")
             } else {
                 let firstMeal = mealViewModel.meals.first(where: { $0.idMealType == mealTypeViewModel.mealTypes.first(where: { $0.name == "Petit déjeuner" })?.id })
                 let secondMeal = mealViewModel.meals.first(where: { $0.idMealType == mealTypeViewModel.mealTypes.first(where: { $0.name == "Déjeuner" })?.id })

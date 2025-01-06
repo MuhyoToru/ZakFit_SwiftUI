@@ -7,14 +7,16 @@
 
 import SwiftUI
 
-struct NonObligatoryFieldExView: View {
+struct LittleTextExView: View {
+    let textToDisplay : String
+    
     var body: some View {
-        Text("Champ non obligatoire")
+        Text(textToDisplay)
             .foregroundStyle(.gray)
             .font(.system(size: 12))
     }
 }
 
 #Preview {
-    NonObligatoryFieldExView()
+    LittleTextExView(textToDisplay: "Test")
 }

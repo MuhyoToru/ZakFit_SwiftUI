@@ -24,23 +24,7 @@ struct MealDetailsView: View {
     var body: some View {
         VStack {
             ZStack {
-                AsyncImage(url: URL(string : meal.image ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: imageHeight * (16/9), height: imageHeight)
-                        .clipShape(
-                            Rectangle()
-                        )
-                } placeholder: {
-                    Image("ZF_noImage")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: imageHeight * (16/9), height: imageHeight)
-                        .clipShape(
-                            Rectangle()
-                        )
-                }
+                BigImageDisplayExView(imageUrl: meal.image ?? "", imageHeight: imageHeight)
                 Rectangle()
                     .fill(Gradient(colors: [.white, .clear, .white]))
                     .frame(height : imageHeight)

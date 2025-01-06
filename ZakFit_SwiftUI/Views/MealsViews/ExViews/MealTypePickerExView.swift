@@ -27,5 +27,5 @@ struct MealTypePickerExView: View {
 }
 
 #Preview {
-    ActivityTypePickerExView(pickerTitle: "Test")
+    MealTypePickerExView(pickerTitle: "Test")
 }

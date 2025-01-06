@@ -7,22 +7,33 @@
 
 import Foundation
 
-class PhysicalActivityGoal: Identifiable {
-    var id: UUID?
+class PhysicalActivityGoal: Goal {
     var activityFrequency: Int
     var caloriesBurned: Double
     var sessionDuration: Double
     var progressionWanted: Double
-    var idChosenPeriod: UUID
-    var idUser: UUID
-
-    init(id: UUID? = nil, activityFrequency: Int, caloriesBurned: Double, sessionDuration: Double, progressionWanted: Double, idChosenPeriod: UUID, idUser: UUID) {
-        self.id = id ?? UUID()
+    
+    init(activityFrequency: Int, caloriesBurned: Double, sessionDuration: Double, progressionWanted: Double, dateStart: Date, idChosenPeriod: UUID, idUser: UUID) {
         self.activityFrequency = activityFrequency
         self.caloriesBurned = caloriesBurned
         self.sessionDuration = sessionDuration
         self.progressionWanted = progressionWanted
-        self.idChosenPeriod = idChosenPeriod
-        self.idUser = idUser
+        super.init(dateStart: dateStart, idChosenPeriod: idChosenPeriod, idUser: idUser)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        activityFrequency = try container.decode(Int.self, forKey: .activityFrequency)
+        caloriesBurned = try container.decode(Double.self, forKey: .caloriesBurned)
+        sessionDuration = try container.decode(Double.self, forKey: .sessionDuration)
+        progressionWanted = try container.decode(Double.self, forKey: .progressionWanted)
+        try super.init(from: decoder)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case activityFrequency
+        case caloriesBurned
+        case sessionDuration
+        case progressionWanted
     }
 }

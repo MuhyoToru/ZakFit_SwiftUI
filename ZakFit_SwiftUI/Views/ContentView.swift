@@ -24,8 +24,11 @@ struct ContentView: View {
                     Tab("Objectifs", systemImage: "trophy") {
                         Text("Work in progress")
                     }
+                    Tab("Recap", systemImage: "text.aligncenter") {
+                        Text("Work in progress")
+                    }
                     Tab("Compte", systemImage: "person") {
-                        AccountView()
+                        AccountSelectionView()
                     }
                 }
                 if userWeightViewModel.userWeights == [] {

@@ -32,7 +32,7 @@ struct EditActivityView: View {
                 TitleExView(imageSystem: "gauge.with.dots.needle.bottom.100percent", title: "Intensité")
                 IntensityPickerExView(pickerTitle: "")
                 TitleExView(imageSystem : "flame.fill", title: "Nombre de calories brulées")
-                NonObligatoryFieldExView()
+                LittleTextExView(textToDisplay: "Champ non obligatoire")
                 NumberFieldExView(textFieldTitle: "Nombre de calories brulées", textUnit: "cal", textInTextField: $caloriesBurned)
                 ErrorMessageExView(errorMessage: $errorMessage)
             }

@@ -23,25 +23,9 @@ struct ActivityDetails: View {
     var body: some View {
         VStack {
             ZStack {
-                AsyncImage(url: URL(string : activityTypeViewModel.activityTypes.first(where: {
+                BigImageDisplayExView(imageUrl: activityTypeViewModel.activityTypes.first(where: {
                     $0.id == physicalActivity.idActivityType
-                })?.image ?? "ZF_noImage")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: imageHeight * (16/9), height: imageHeight)
-                        .clipShape(
-                            Rectangle()
-                        )
-                } placeholder: {
-                    Image("ZF_noImage")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: imageHeight * (16/9), height: imageHeight)
-                        .clipShape(
-                            Rectangle()
-                        )
-                }
+                })?.image ?? "ZF_noImage", imageHeight: imageHeight)
                 Rectangle()
                     .fill(Gradient(colors: [.white, .clear, .white]))
                     .frame(height : imageHeight)
@@ -93,8 +77,12 @@ struct ActivityDetails: View {
             }
         }
         .onAppear(perform: {
+            physicalActivityViewModel.fetchOneById(idPhysicalActivity: physicalActivity.id!)
             dateActivity = physicalActivity.date
             dateActivityCalendar = Calendar.current.dateComponents([.year, .month, .day], from: dateActivity)
+        })
+        .onChange(of: physicalActivityViewModel.onePhysicalActivity, {
+            physicalActivity = physicalActivityViewModel.onePhysicalActivity
         })
     }
 }

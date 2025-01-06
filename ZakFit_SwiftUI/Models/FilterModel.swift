@@ -11,10 +11,12 @@ class Filter {
     var activity : String?
     var date : Date?
     var temporalRelation : TemporalRelation?
+    var sortMethod : SortMethod?
     
-    init(activity: String? = nil, date: Date? = nil, temporalRelation: TemporalRelation? = nil) {
+    init(activity: String? = nil, date: Date? = nil, temporalRelation: TemporalRelation? = nil, sortMethod: SortMethod? = nil) {
         self.activity = activity
         self.date = date
         self.temporalRelation = temporalRelation
+        self.sortMethod = sortMethod
     }
 }

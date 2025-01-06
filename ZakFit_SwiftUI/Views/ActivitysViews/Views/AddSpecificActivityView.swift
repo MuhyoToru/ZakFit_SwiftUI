@@ -38,12 +38,12 @@ struct AddSpecificActivityView: View {
             VStack(alignment: .leading) {
                 TitleExView(imageSystem: "calendar", title: "Date de l'activité")
                 DatePickerExView(datePickerTitle: "", date: $date)
-                TitleExView(title: "Durée de l'activité")
+                TitleExView(imageSystem: "clock",title: "Durée de l'activité")
                 NumberFieldExView(textFieldTitle: "Durée de l'activité", textUnit: "h", textInTextField: $duration)
-                TitleExView(title: "Intensité")
+                TitleExView(imageSystem: "gauge.with.dots.needle.bottom.100percent", title: "Intensité")
                 IntensityPickerExView(pickerTitle: "")
-                TitleExView(title: "Nombre de calories brulées")
-                NonObligatoryFieldExView()
+                TitleExView(imageSystem: "flame.fill", title: "Nombre de calories brulées")
+                LittleTextExView(textToDisplay: "Champ non obligatoire")
                 NumberFieldExView(textFieldTitle: "Nombre de calories brulées", textUnit: "cal", textInTextField: $caloriesBurned)
                 ErrorMessageExView(errorMessage: $errorMessage)
             }
